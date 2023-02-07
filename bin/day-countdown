@@ -1,0 +1,17 @@
+#!/usr/bin/env sh
+
+show_usage() {
+    echo "Usage: $(basename "$0") DATE_STRING" 2>&1
+}
+
+if [ $# -ne 1 ]; then
+    show_usage
+    exit 1
+fi
+
+set -e
+
+target=$(date -d "$1" +%-j)
+today=$(date +%-j)
+days=$((target - today))
+echo "$days days remaining"

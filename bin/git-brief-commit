@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+
+show_usage() {
+    echo "Usage: $(basename "$0") MODE" 2>&1
+    echo "MODE needs to be {normal,amend}" 2>&1
+}
+
+case $1 in
+    -h|--help) show_usage ; exit 0 ;;
+    -*)        show_usage ; exit 1 ;;
+    normal)    git commit --allow-empty-message --no-edit ;;
+    amend)     git commit --allow-empty-message --no-edit --amend ;;
+    *)         show_usage ; exit 1 ;;
+esac

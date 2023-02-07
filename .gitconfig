@@ -1,0 +1,35 @@
+[user]
+	email = 79308609+danielsource@users.noreply.github.com
+	name = daniel.source
+[color]
+	ui = auto
+[credential "https://github.com"]
+	helper = !/usr/bin/gh auth git-credential
+[init]
+	defaultBranch = main
+[push]
+	followTags = true
+[alias]
+	a  = add
+	b  = branch
+	c  = commit
+	ch = checkout
+	cl = clone
+	d  = diff
+	ds = diff --staged
+	f  = fetch
+	g  = grep
+	h  = help
+	i  = init
+	l  = log
+	ls = ls-tree
+	m  = merge
+	ph = push
+	pl = pull
+	r  = rebase
+	s  = status
+	sh = show
+	sw = switch
+	t  = tag
+	zb = brief-commit
+	zl = ls-tree -r --name-only HEAD

@@ -1,0 +1,4 @@
+--recurse=yes
+--exclude=.git
+--kinds-c=+p
+--tag-relative=never

@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+
+if [ $# -gt 0 ]; then
+    python -c "help('$*')"
+else
+    python -c "help()"
+fi

@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+
+_yt() {
+    output='%(artist|)s%(artist& - |)s%(playlist|)s%(playlist& - |)s%(playlist_index|)03d%(playlist_index& - |)s%(title)s.%(ext)s'
+    yt-dlp --continue --embed-thumbnail --embed-chapters --embed-metadata -o "$output" "$@"
+}
+
+_ytmusic() {
+    _yt -P "$(xdg-user-dir MUSIC || echo ~/Music)" --extract-audio --audio-quality 0 "$@"
+}
+
+case $(basename "$0") in
+    ytmusic) _ytmusic "$@" ;;
+    yt|*) _yt "$@" ;;
+esac
