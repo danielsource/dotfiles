@@ -41,6 +41,7 @@ mkshortcut() {
         alias_dir "$@"
     else
         alias_txt "$@"
+        name=${name//-/_}
         eval "dir_$name=$(dirname "$path")"
     fi
     eval "$name=$path"
@@ -78,6 +79,23 @@ l() {
 vf() {
     nvim -c "find $*"
 }
+
+open_files() {
+    if command -v exo-open >/dev/null; then
+        echo "exo-open $*" >&2
+        setsid exo-open "$@" >& /dev/null
+        return $?
+    fi
+    if command -v xdg-open >/dev/null; then
+        for file in "$@" ; do
+            echo "xdg-open $file" >&2
+            setsid xdg-open "$file" >& /dev/null
+        done
+        return $?
+    fi
+    echo "${FUNCNAME[0]}: package 'xdg-utils' or 'exo' is required." >&2
+    return 1
+}
 # }}}
 
 alias E='exec '
@@ -94,7 +112,7 @@ alias ll='ls -lav'
 alias ls='_ls'
 alias md='mkdir -p'
 alias mv='mv -i'
-alias o=xdg-open
+alias o=open_files
 alias p=pwd
 alias pm='sudo pacman'
 alias q=qalc
@@ -122,8 +140,10 @@ done
 
 mkshortcut aliases ~/.bash_aliases
 mkshortcut bashrc ~/.bashrc
+mkshortcut ci3 "${XDG_CONFIG_DIR:-$HOME}/.config/i3/config"
+mkshortcut ci3b "${XDG_CONFIG_DIR:-$HOME}/.config/i3/i3blocks.conf"
+mkshortcut cnvim "${XDG_CONFIG_DIR:-$HOME}/.config/nvim/init.vim"
 mkshortcut dotf   "${XDG_DOCUMENTS_DIR:-$HOME}/dotfiles" git ls-tree -r --name-only HEAD
-mkshortcut neovim "${XDG_CONFIG_DIR:-$HOME}/.config/nvim/init.vim"
 mkshortcut todo   "${XDG_DOCUMENTS_DIR:-$HOME}/TODO.txt"
 
 # Alias g to git

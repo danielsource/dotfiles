@@ -7,6 +7,8 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
+[[ -z "$FUNCNEST" ]] && export FUNCNEST=100 # limits recursive functions, see 'man bash'
+
 # This command disables the annoying default behavior of 'Ctrl-s', which
 # causes the terminal to freeze and become unresponsive.
 stty -ixon
@@ -47,7 +49,7 @@ pro() {
         fi
     done
     if [ "$1" = - ]; then
-        return $?
+        return
     fi
     if [ -z "$1" ]; then
         cd "$projects_dir" && l
@@ -61,6 +63,8 @@ PS1='\[\e]0;\W\a\]\[\e[30;106m\]($?) \W \$\[\e[0m\] '
 
 HISTSIZE=10000
 HISTFILESIZE=20000
+
+printf '\x1b[6;1 q'
 
 shopt -s autocd
 

@@ -17,8 +17,13 @@
 /.config/*
 
 !/.config/ctags/
-
+!/.config/dunst/
 !/.config/fontconfig/
+!/.config/htop/
+!/.config/kitty/
+
+!/.config/i3/
+/.config/i3/scripts/archived/
 
 !/.config/nvim/
 /.config/nvim/spell/*.spl
