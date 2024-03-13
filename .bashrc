@@ -2,10 +2,6 @@ if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]; then
 	PATH="$HOME/.local/bin:$HOME/bin:$PATH"
 fi
 
-if ! [[ "$PATH" =~ ':/var/lib/flatpak/exports/bin' ]]; then
-	PATH="$PATH:/var/lib/flatpak/exports/bin"
-fi
-
 export PATH
 
 [[ $- != *i* ]] && return
@@ -34,9 +30,9 @@ esac
 PROMPT_COMMAND='exitcode=$?; if [ $exitcode -ne 0 ]; then exitcode="$exitcode "; else unset exitcode; fi'
 
 export PS1 PROMPT_COMMAND HISTSIZE=10000 HISTFILESIZE=20000 \
-	FZF_DEFAULT_COMMAND='find .' \
-	FZF_CTRL_T_COMMAND='find .' \
-	FZF_ALT_C_COMMAND='find . -type d' \
+	FZF_DEFAULT_COMMAND='find -L.' \
+	FZF_CTRL_T_COMMAND='find -L .' \
+	FZF_ALT_C_COMMAND='find -L . -type d' \
 	FZF_DEFAULT_OPTS='--no-color'
 
 if ! shopt -oq posix; then
@@ -46,7 +42,7 @@ if ! shopt -oq posix; then
 		. /etc/bash_completion
 	fi
 
-	if [ -f /usr/share/doc/fzf/examples/key-bindings.bash ]; then
-		. /usr/share/doc/fzf/examples/key-bindings.bash
+	if [ -f /usr/share/fzf/key-bindings.bash ]; then
+		. /usr/share/fzf/key-bindings.bash
 	fi
 fi

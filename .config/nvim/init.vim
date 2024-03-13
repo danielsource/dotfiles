@@ -16,9 +16,11 @@ let g:netrw_winsize = 15
 
 inoremap <C-s> <Cmd>update<CR>
 noremap <C-s> <Cmd>update<CR>
-inoremap <F5> <Cmd>make!<CR>
-nnoremap <F5> <Cmd>make<CR>
-nnoremap <F9> <Cmd>prev<CR>
+inoremap <F5> <Cmd>silent make!<CR>
+nnoremap <F5> <Cmd>silent make!<CR>
+inoremap <F6> <Cmd>make!<CR>
+nnoremap <F6> <Cmd>make<CR>
+nnoremap <F7> <Cmd>prev<CR>
 nnoremap <F8> <Cmd>n<CR>
 nnoremap <C-n> <Cmd>cn<CR>
 nnoremap <C-p> <Cmd>cp<CR>

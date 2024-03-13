@@ -35,3 +35,5 @@ hi Statement    cterm=bold ctermfg=5
 hi! link Identifier  Special
 hi! link Todo        Special
 hi! link Type        Statement
+
+hi! link javaScript  Normal
