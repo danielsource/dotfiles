@@ -1,4 +1,4 @@
-export EDITOR=/usr/bin/nvim
+export EDITOR=/usr/bin/vim
 export MOZ_USE_XINPUT2=1
 
 # if running bash

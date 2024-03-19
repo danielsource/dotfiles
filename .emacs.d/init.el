@@ -23,8 +23,7 @@ Return t if THEME was successfully loaded, nil otherwise."
     (if file
 	(load-theme theme t))))
 
-(if (not custom-enabled-themes)
-    (d/load-theme 'modus-vivendi))
+(set-face-attribute 'region nil :background "#ccf")
 
 ;; theme ends here
 
@@ -62,6 +61,8 @@ Return t if THEME was successfully loaded, nil otherwise."
 ;; Auto pair parentheses, braces, quotes, etc.
 (electric-pair-mode)
 (setq electric-pair-preserve-balance nil)
+
+(show-paren-mode 1)
 
 ;; Auto-update buffer if file has changed on disk.
 (global-auto-revert-mode 1)
@@ -102,6 +103,20 @@ Return t if THEME was successfully loaded, nil otherwise."
   (save-excursion
     (indent-region (point-min) (point-max) nil)))
 
+(defun d/run ()
+  (interactive)
+  (setq current-prefix-arg '(4))
+  (call-interactively 'compile))
+
+(defun d/rerun ()
+  (interactive)
+  (setq current-prefix-arg '(4))
+  (if compile-command
+      (compile compile-command t)
+    (d/run)))
+
+(setq compilation-scroll-output 'first-error)
+
 ;;
 ;; Setup C Linux coding style
 ;; https://www.kernel.org/doc/html/v4.10/process/coding-style.html#you-ve-made-a-mess-of-it
@@ -135,31 +150,23 @@ Return t if THEME was successfully loaded, nil otherwise."
 ;; C ends here
 
 ;;
-;; Spell checking
-;;
-
-(with-eval-after-load "ispell"
-  (setq ispell-program-name "hunspell")
-  (setq ispell-dictionary "en_US,pt_BR")
-  (ispell-set-spellchecker-params)
-  (ispell-hunspell-add-multi-dic ispell-dictionary))
-
-;;
 ;; General keybindings
 ;;
 
 (ffap-bindings)
 (global-set-key (kbd "<f12>") 'd/reload-config)
-(global-set-key (kbd "<f5>") 'recompile)
+(global-set-key (kbd "<f5>") 'd/rerun)
 (global-set-key (kbd "<f9>") 'imenu)
 (global-set-key (kbd "C-z") 'undo)
 (global-set-key (kbd "C-S-z") 'undo-redo)
-(global-set-key (kbd "C-c c") 'compile)
+(global-set-key (kbd "C-c c") 'd/run)
 (global-set-key (kbd "C-c f") 'find-name-dired)
 (global-set-key (kbd "C-c i") 'd/format-buffer)
 (global-set-key (kbd "C-c r") 'recentf-open-files)
 (global-set-key (kbd "C-c s") 'sort-lines)
 (global-set-key (kbd "C-x m") 'man)
 (global-set-key (kbd "C-ç") 'xref-find-references)
+(global-set-key (kbd "M-ç") 'dabbrev-expand)
+(global-set-key (kbd "C-M-ç") 'dabbrev-completion)
 
 ;;; init.el ends here
