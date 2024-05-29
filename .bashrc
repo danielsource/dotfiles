@@ -1,21 +1,24 @@
-if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]; then
-	PATH="$HOME/.local/bin:$HOME/bin:$PATH"
-fi
-
-export PATH
-
 [[ $- != *i* ]] && return
 
 shopt -s checkwinsize expand_aliases histappend extglob autocd
 
 unalias -a
-alias e='${EDITOR:-vi}'
+
+alias sudo='sudo '
+alias cp='cp -i -b'
 alias gdb='gdb -q'
 alias ip='ip --color=always'
-alias l='ls -la'
 alias ls='LC_COLLATE=C ls --color=auto --group-directories-first'
+alias mv='mv -i -b'
+alias rm='rm -I'
+
+alias e='${EDITOR:-vi}'
+alias l='ls -la'
 alias m=make
 alias o='setsid xdg-open'
+alias py=python3
+alias q=qalc
+alias th='gio trash'
 
 case $TERM in *-256color)
 	if [ $EUID -ne 0 ]; then
@@ -31,15 +34,11 @@ esac
 
 PROMPT_COMMAND='exitcode=$?; if [ $exitcode -ne 0 ]; then exitcode="$exitcode "; else unset exitcode; fi'
 
-export PS1 PROMPT_COMMAND HISTSIZE=10000 HISTFILESIZE=200000 \
-	FZF_DEFAULT_COMMAND='find .' \
-	FZF_CTRL_T_COMMAND='find .' \
-	FZF_ALT_C_COMMAND='find . -type d' \
-	FZF_DEFAULT_OPTS='--no-color'
+export PS1 PROMPT_COMMAND HISTSIZE=10000 HISTFILESIZE=200000
 
 if ! shopt -oq posix && [ "$TERM" != dumb ]; then
-	if [ -f /usr/share/bash-completion/bash_completion ]; then
-		. /usr/share/bash-completion/bash_completion
+	if [ -f "${PREFIX:-/usr}"/share/bash-completion/bash_completion ]; then
+		. "${PREFIX:-/usr}"/share/bash-completion/bash_completion
 	elif [ -f /etc/bash_completion ]; then
 		. /etc/bash_completion
 	fi
@@ -50,3 +49,19 @@ if ! shopt -oq posix && [ "$TERM" != dumb ]; then
 		. "${PREFIX:-/usr}"/share/fzf/key-bindings.bash
 	fi
 fi
+
+datediff() {
+	if [ $# -eq 1 ]; then
+		d1="$(date +%s)" || return $?
+	elif [ $# -ne 2 ]; then
+		return 1
+	else
+		d1=$(date -d "$2" +%s) || return $?
+	fi
+	d2=$(date -d "$1" +%s) || return $?
+	if [ $d1 -lt $d2 ]; then
+		echo $(( (d2 - d1) / 86400 )) days
+	else
+		echo $(( (d1 - d2) / 86400 )) days
+	fi
+}
