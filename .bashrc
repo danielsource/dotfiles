@@ -16,6 +16,7 @@ alias e='${EDITOR:-vi}'
 alias l='ls -la'
 alias m=make
 alias o='setsid xdg-open'
+alias ox='exec setsid xdg-open'
 alias py=python3
 alias q=qalc
 alias th='gio trash'
