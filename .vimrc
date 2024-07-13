@@ -1,3 +1,6 @@
+filetype plugin indent on
+
+set ts=4 sw=4 sts=0 expandtab
 set nu rnu
 set autowrite
 set cinoptions=t0,:0,g0
@@ -7,8 +10,17 @@ set path+=**,~/.config/**,/usr/include/SDL2,/usr/local/include
 set spelllang=en,pt
 set splitright splitbelow
 set title titlestring=\%(%m\ %)%t
-set undofile
-let $BASH_ENV = "~/.bashrc"
+set list listchars=tab:»\ ,trail:·
+set timeoutlen=1000 ttimeoutlen=50
+
+" Undo setup!
+if !isdirectory($HOME."/.vim")
+    call mkdir($HOME."/.vim", "", 0770)
+endif
+if !isdirectory($HOME."/.vim/undodir")
+    call mkdir($HOME."/.vim/undodir", "", 0700)
+endif
+set undofile undodir=~/.vim/undodir
 
 let g:c_no_curly_error = 1
 let g:mapleader = ' '
@@ -58,6 +70,16 @@ nnoremap <Leader>7 :tabnext 7<CR>
 nnoremap <Leader>8 :tabnext 8<CR>
 nnoremap <Leader>9 :tabnext 9<CR>
 
-set bg=light
-colo okayokay
-syn off
+syn on
+colorscheme habamax
+
+function! g:PleaseRemoveMatchParen()
+    set noshowmatch
+    if exists(":NoMatchParen")
+        :NoMatchParen
+    endif
+endfunction
+augroup plugin_initialize
+    autocmd!
+    autocmd VimEnter * call PleaseRemoveMatchParen()
+augroup END
