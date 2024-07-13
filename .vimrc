@@ -1,14 +1,31 @@
+filetype plugin indent on
+runtime ftplugin/man.vim
+
+set ts=4 sw=4 sts=0 et
 set nu rnu
 set autowrite
 set cinoptions=t0,:0,g0
 set formatoptions+=l
 set mouse=a
-set path+=**,~/.config/**,/usr/include/SDL2,/usr/local/include
+set path+=**,/usr/include/SDL2,/usr/local/include
 set spelllang=en,pt
 set splitright splitbelow
 set title titlestring=\%(%m\ %)%t
-set undofile
-let $BASH_ENV = "~/.bashrc"
+set list listchars=tab:»\ ,trail:·
+set timeoutlen=1000 ttimeoutlen=50
+set keywordprg=:Man
+set wildmenu wildmode=list:longest,full
+set showcmd
+set modeline exrc secure
+
+" Undo setup!
+if !isdirectory($HOME."/.vim")
+    call mkdir($HOME."/.vim", "", 0770)
+endif
+if !isdirectory($HOME."/.vim/undodir")
+    call mkdir($HOME."/.vim/undodir", "", 0700)
+endif
+set undofile undodir=~/.vim/undodir
 
 let g:c_no_curly_error = 1
 let g:mapleader = ' '
@@ -17,10 +34,8 @@ let g:netrw_winsize = 15
 
 inoremap <C-s> <Cmd>update<CR>
 noremap <C-s> <Cmd>update<CR>
-inoremap <F5> <Cmd>silent make!<CR>
-nnoremap <F5> <Cmd>silent make!<CR>
 inoremap <F6> <Cmd>make!<CR>
-nnoremap <F6> <Cmd>make<CR>
+nnoremap <F6> <Cmd>make!<CR>
 nnoremap <F7> <Cmd>prev<CR>
 nnoremap <F8> <Cmd>n<CR>
 nnoremap <C-n> <Cmd>cn<CR>
@@ -32,8 +47,6 @@ nnoremap <Leader>e <Cmd>Lex<CR>
 nnoremap <Leader>o <Cmd>set spell!<CR>
 nnoremap <Leader>s vip:sort<CR>
 vnoremap <Leader>s <Cmd>sort<CR>
-
-cnoremap <M-w> \<\><Left><Left>
 
 nnoremap <Leader>h :wincmd h<CR>
 nnoremap <Leader>j :wincmd j<CR>
@@ -58,6 +71,18 @@ nnoremap <Leader>7 :tabnext 7<CR>
 nnoremap <Leader>8 :tabnext 8<CR>
 nnoremap <Leader>9 :tabnext 9<CR>
 
-set bg=light
-colo okayokay
-syn off
+syn on
+colorscheme habamax
+set bg=dark
+hi Normal ctermbg=NONE
+
+function! g:PleaseRemoveMatchParen()
+    set noshowmatch
+    if exists(":NoMatchParen")
+        :NoMatchParen
+    endif
+endfunction
+augroup plugin_initialize
+    autocmd!
+    autocmd VimEnter * call PleaseRemoveMatchParen()
+augroup END

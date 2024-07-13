@@ -1,0 +1,16 @@
+#!/bin/sh
+
+if [ "$#" -ne 1 ]; then
+    echo 'usage: lof <app-name>' >&2
+    return 1;
+fi
+
+app_name="$1"
+app_pid=$(pgrep -f "^${app_name}" | sed 1q)
+
+if [ -z "$app_pid" ]; then
+    exec $app_name
+fi
+
+wid=$(wmctrl -lp | awk "/$app_pid/{print \$1}")
+wmctrl -iR "$wid"
