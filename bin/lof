@@ -1,0 +1,23 @@
+#!/bin/sh
+# lof: launch or focus windows
+
+if [ "$#" -lt 1 ]; then
+    echo 'usage: lof <prog-name> [prog-arg ...]' >&2
+    exit 1
+fi
+
+focus_pid() {
+    wid=$(wmctrl -lp | awk "/$1/{print \$1}")
+    if [ -z "$wid" ]; then
+        return 2
+    fi
+    wmctrl -iR "$wid"
+}
+
+pid=$(pgrep -f "^$1" | sed 1q)
+
+if [ -z "$pid" ]; then
+    exec "$@"
+fi
+
+focus_pid "$pid"
