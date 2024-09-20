@@ -1,0 +1,20 @@
+[user]
+    name = danielsource
+    email = 0xfeedcafe@proton.me
+[init]
+    defaultBranch = main
+    templateDir = ~/.git_repo_template
+[core]
+    editor = vim
+    autocrlf = input
+[credential "https://github.com"]
+    helper = !gh auth git-credential
+[include]
+    path = ~/.gitinfo
+[color "diff"]
+    meta = blue
+[alias]
+    c = commit --no-edit --allow-empty-message
+    s = status -sb
+    adog = log --all --decorate --oneline --graph
+    gsed = !git ls-files -z | xargs -0 sed -i -e

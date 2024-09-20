@@ -1,0 +1,42 @@
+.POSIX:
+.SILENT:
+.SUFFIXES:
+.SUFFIXES: .c .o
+.PHONY: all options clean
+
+#include config.mk
+
+RAYLIB_INC = ./raylib
+RAYLIB_LIB = ./raylib
+
+warnings = -Wall -Wextra -Wpedantic -Wshadow -Wconversion
+
+CC = cc
+RM ?= rm -f
+CFLAGS = -std=c99 $(warnings) -g -O0 -I $(RAYLIB_INC)
+#CFLAGS = -std=c99 $(warnings) -ggdb -O0 -DDEBUG -fanalyzer -fsanitize=address,leak,undefined
+LDFLAGS = -L $(RAYLIB_LIB) -l:libraylib.a -lGL -lm -lpthread -ldl -lrt -lX11
+
+prog = game
+objs = $(prog).o util.o
+
+all: $(prog)
+options:
+	@echo "$(prog) build options:"
+	@echo "CFLAGS  = $(CFLAGS)"
+	@echo "LDFLAGS = $(LDFLAGS)"
+	@echo "CC      = $(CC)"
+clean:
+	$(RM) *.o $(prog)
+
+$(prog): $(objs)
+	@echo "  LD      $@"
+	$(CC) -o $@ $(objs) $(CFLAGS) $(LDFLAGS)
+$(prog).o: $(prog).c $(prog).h util.h
+util.o: util.c util.h
+
+.c.o:
+	@echo "  CC      $@"
+	$(CC) -c $< -o $@ $(CFLAGS)
+
+# vim:ft=make:
