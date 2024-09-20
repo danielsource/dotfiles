@@ -17,6 +17,7 @@ set keywordprg=:Man
 set wildmenu wildmode=list:longest,full
 set showcmd
 set modeline exrc secure
+set textwidth=72
 
 " Undo setup!
 if !isdirectory($HOME."/.vim")

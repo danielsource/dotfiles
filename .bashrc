@@ -17,7 +17,7 @@ alias ls='LC_COLLATE=C ls --color --group-directories-first'
 alias l='ls'
 alias ll='ls -la'
 alias gdb='gdb -q'
-alias o='setsid xdg-open'
+alias o='open_file'
 alias ox='exec setsid xdg-open'
 alias py=python3
 alias q=qalc
@@ -49,7 +49,7 @@ function inf {
     printf '\n'
 }
 
-truecolortest() {
+function truecolortest {
     awk 'BEGIN{
     s="/\\/\\/\\/\\/\\"; s=s s s s s s s s;
     for (colnum = 0; colnum<77; colnum++) {
@@ -150,6 +150,12 @@ function venv {
     if [ -n "$venv" ]; then
         source "$venv"
     fi
+}
+
+function open_file {
+    for arg; do
+        setsid xdg-open "$arg"
+    done
 }
 
 PS1='${exitcode}\W\$ '
