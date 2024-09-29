@@ -34,7 +34,7 @@ function inf {
     sensors 2>/dev/null | awk '/Tctl:/{print "CPU temp:\t"$2}'
     printf 'Memory in use:\t' && free -m | awk '/Mem/{print $3+$5"M"}'
     df -h | awk '/\/$/{print "Storage:\t"$3"/"$2" ("$5")"}'
-    term=$(readlink "/proc/$(cat /proc/$(echo $$)/stat | cut -d ' ' -f 4)/exe")
+    local term=$(readlink "/proc/$(cat /proc/$(echo $$)/stat | cut -d ' ' -f 4)/exe")
     if [ -n "$term" ]; then
         printf 'Terminal:\t%s\n' "$term"
     fi
@@ -87,7 +87,7 @@ function n {
         if ! [ -f "$NOTES" ]; then
             echo '[n]' >> "$NOTES"
         fi
-        date=$(date '+%a.%d.%m %H:%M')
+        local date=$(date '+%a.%d.%m %H:%M')
         echo "$date | $@" >> "$NOTES"
     fi
 }
@@ -109,6 +109,7 @@ function ns {
 }
 
 function datediff {
+    local d1 d2
     if [ $# -eq 1 ]; then
         d1="$(date +%s)" || return $?
     elif [ $# -ne 2 ]; then
@@ -124,29 +125,8 @@ function datediff {
     fi
 }
 
-function repos {
-    local location=~/Documents/repos
-    for r in `find "$location"/* -maxdepth 1 -type d -name .git`; do
-        r=${r%/.git}
-        printf '[\e[1;34m%s\e[0m] on \e[1;31m%s\e[0m\n' "$(basename "$r")" "$(git -C "$r" branch --show-current || echo '<error>')"
-        case $1 in
-            status|'') git -C "$r" status -s ;;
-            fetch)     git -C "$r" fetch -apPv
-                if git -C "$r" remote get-url upstream >/dev/null 2>&1; then
-                    git -C "$r" fetch -apPv upstream
-                fi
-                ;;
-            *)         printf 'noop\n';
-        esac
-        printf '\n'
-    done
-    if [ $# -eq 0 ]; then
-        cd "$location" || return
-    fi
-}
-
 function venv {
-    venv=$(find . -maxdepth 3 -type f -path './*/bin/activate' | sort | head -1)
+    local venv=$(find . -maxdepth 3 -type f -path './*/bin/activate' | sort | head -1)
     if [ -n "$venv" ]; then
         source "$venv"
     fi
@@ -210,10 +190,6 @@ if ! shopt -oq posix && [ "$TERM" != dumb ]; then
 
     if command -v __git_ps1 >/dev/null; then
         PS1='`__git_ps1 "(\[\e[1;31m\]%s\[\e[0m\]) "`'$PS1
-
-        if shopt -q login_shell && [ "$(basename "$PWD")" = repos ]; then
-            repos
-        fi
 
         if [ -z "$VIRTUAL_ENV" ] && ! [ -f ~/.cache/.no-venv ]; then
             venv
