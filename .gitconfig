@@ -1,13 +1,13 @@
 [user]
-    email = 79308609+danielsource@users.noreply.github.com
-    name = daniel.source
+	email = 79308609+danielsource@users.noreply.github.com
+	name = daniel.source
 [init]
-    defaultBranch = main
+	defaultBranch = main
 [credential "https://github.com"]
-    helper = !gh auth git-credential
+	helper = !gh auth git-credential
 [color "diff"]
-    meta = blue
+	meta = blue
 [include]
-    path = ~/.gitinfo
+	path = ~/.gitinfo
 [alias]
-    adog = log --all --decorate --oneline --graph
+	adog = log --all --decorate --oneline --graph

@@ -1,39 +1,38 @@
 #!/bin/sh
 
 if [ "$#" -ne 1 ]; then
-    echo 'usage: lof <app-name>' >&2
-    return 1
+	echo 'usage: lof <app-name>' >&2
+	return 1
 fi
 
 focus_pid() {
-    wid=$(wmctrl -lp | awk "/$1/{print \$1}")
-    if [ -z "$wid" ]; then
-        return 2
-    fi
-    wmctrl -iR "$wid"
+	wid=$(wmctrl -lp | awk "/$1/{print \$1}")
+	if [ -z "$wid" ]; then
+		return 2
+	fi
+	wmctrl -iR "$wid"
 }
 
 app_name="$1"
 case $app_name in
-    */Thunar)
-        app_pid=$(pgrep -f "^/usr/bin/Thunar --daemon$" | sed 1q)
-        if [ -z "$app_pid" ]; then
-            exec $app_name
-        fi
+	Thunar)
+		app_pid=$(pgrep -f "^/usr/bin/Thunar --daemon$" | sed 1q)
+		if [ -z "$app_pid" ]; then
+			exec $app_name
+		fi
 
-        focus_pid "$app_pid"
-        if [ $? -eq 2 ]; then
-            exec $app_name
-        fi
+		focus_pid "$app_pid"
+		if [ $? -eq 2 ]; then
+			exec $app_name
+		fi
 
-        return
-        ;;
-    */emacs-gtk) app_pid=$(pgrep -f /usr/bin/emacs-gtk | sed 1q) ;;
-    *)           app_pid=$(pgrep -f "^${app_name}" | sed 1q) ;;
+		return
+		;;
+	*) app_pid=$(pgrep -f "^${app_name}" | sed 1q) ;;
 esac
 
 if [ -z "$app_pid" ]; then
-    exec $app_name
+	exec $app_name
 fi
 
 focus_pid "$app_pid"

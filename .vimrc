@@ -1,7 +1,6 @@
 filetype plugin indent on
 runtime ftplugin/man.vim
 
-set ts=4 sw=4 sts=0 et
 set nu rnu
 set autowrite
 set cinoptions=t0,:0,g0
@@ -11,7 +10,7 @@ set path+=**,/usr/include/SDL2,/usr/local/include
 set spelllang=en,pt
 set splitright splitbelow
 set title titlestring=\%(%m\ %)%t
-set list listchars=tab:»\ ,trail:·
+set listchars=tab:>\ ,trail:·
 set timeoutlen=1000 ttimeoutlen=50
 set keywordprg=:Man
 set wildmenu wildmode=list:longest,full
@@ -21,10 +20,10 @@ set textwidth=72
 
 " Undo setup!
 if !isdirectory($HOME."/.vim")
-    call mkdir($HOME."/.vim", "", 0770)
+	call mkdir($HOME."/.vim", "", 0770)
 endif
 if !isdirectory($HOME."/.vim/undodir")
-    call mkdir($HOME."/.vim/undodir", "", 0700)
+	call mkdir($HOME."/.vim/undodir", "", 0700)
 endif
 set undofile undodir=~/.vim/undodir
 
@@ -78,12 +77,12 @@ set bg=dark
 hi Normal ctermbg=NONE
 
 function! g:PleaseRemoveMatchParen()
-    set noshowmatch
-    if exists(":NoMatchParen")
-        :NoMatchParen
-    endif
+	set noshowmatch
+	if exists(":NoMatchParen")
+		:NoMatchParen
+	endif
 endfunction
 augroup plugin_initialize
-    autocmd!
-    autocmd VimEnter * call PleaseRemoveMatchParen()
+	autocmd!
+	autocmd VimEnter * call PleaseRemoveMatchParen()
 augroup END
