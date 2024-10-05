@@ -174,6 +174,6 @@ if ! shopt -oq posix && [ "$TERM" != dumb ]; then
 		-o -type d -print \
 		-o -type l -print 2> /dev/null | cut -b3-"}"
 
-	export FZF_ALT_C_COMMAND="${FZF_ALT_C_COMMAND:-"command find -L . -mindepth 1 \\( -path '*/\\.*' -o -fstype 'sysfs' -o -fstype 'devfs' -o -fstype 'devtmpfs' -o -fstype 'proc' -o -path '*/dosdevices/*' \\) -prune \
+	export FZF_ALT_C_COMMAND="${FZF_ALT_C_COMMAND:-"command find -L . -mindepth 1 \\( -path '*/\\.*' -and -not -name .archive -o -fstype 'sysfs' -o -fstype 'devfs' -o -fstype 'devtmpfs' -o -fstype 'proc' -o -path '*/dosdevices/*' \\) -prune \
 		-o -type d -print 2> /dev/null | cut -b3-"}"
 fi

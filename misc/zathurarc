@@ -1,0 +1,10 @@
+set selection-clipboard clipboard
+
+map <C-a> exec "zathura $FILE"
+map [fullscreen] <C-a> exec "zathura $FILE"
+
+map j scroll half-down
+map [fullscreen] j scroll half-down
+
+map k scroll half-up
+map [fullscreen] k scroll half-up

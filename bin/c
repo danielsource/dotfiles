@@ -1,0 +1,3 @@
+#!/bin/sh
+
+countdown "$@" && notify-send -a countdown -i clock "countdown $*: finished" "$(date)"

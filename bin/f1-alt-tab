@@ -1,0 +1,4 @@
+#!/bin/sh
+
+xdotool keyup --clearmodifiers F1
+xdotool key --clearmodifiers Alt+Tab
