@@ -34,10 +34,10 @@ let g:netrw_winsize = 15
 
 inoremap <C-s> <Cmd>update<CR>
 noremap <C-s> <Cmd>update<CR>
-inoremap <F6> <Cmd>make!<CR>
-nnoremap <F6> <Cmd>make!<CR>
-nnoremap <F7> <Cmd>prev<CR>
-nnoremap <F8> <Cmd>n<CR>
+inoremap <F5> <Cmd>make!<CR>
+nnoremap <F5> <Cmd>make!<CR>
+nnoremap <F6> <cmd>prev<CR>
+nnoremap <F7> <Cmd>n<CR>
 nnoremap <C-n> <Cmd>cn<CR>
 nnoremap <C-p> <Cmd>cp<CR>
 vnoremap . :normal .<CR>
@@ -72,9 +72,9 @@ nnoremap <Leader>8 :tabnext 8<CR>
 nnoremap <Leader>9 :tabnext 9<CR>
 
 syn on
-colorscheme habamax
-set bg=dark
-hi Normal ctermbg=NONE
+if hostname() == 'desktop1'
+	colorscheme lunaperche
+endif
 
 function! g:PleaseRemoveMatchParen()
 	set noshowmatch
