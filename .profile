@@ -1,5 +1,5 @@
 export PATH="$HOME/.local/bin:$HOME/bin:$PATH"\
-	EDITOR=/usr/bin/vi\
+	EDITOR=/usr/bin/vim\
 	FZF_DEFAULT_OPTS='--no-color'
 
 if [ -d ~/.profile.d ]; then
