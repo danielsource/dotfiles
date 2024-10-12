@@ -29,7 +29,12 @@ fi
 
 # system information
 function inf {
-	uname -sr
+	sh - <<- "EOF"
+	if [ -f /etc/os-release ]; then
+		. /etc/os-release
+	fi
+	printf '%s %s\n' "$NAME" "$(uname -sr)"
+	EOF
 	uptime | sed 's/ //'
 	sensors 2>/dev/null | awk '/Tctl:/{print "CPU temp:\t"$2}'
 	printf 'Memory in use:\t' && free -m | awk '/Mem/{print $3+$5"M"}'
@@ -118,13 +123,14 @@ fi
 
 case "$TERM" in
 	xterm*|rxvt*)
-		PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+		PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\w (\u@\h)\a\]$PS1"
 		;;
 	*)
 		;;
 esac
 
 export PS1 PROMPT_COMMAND HISTSIZE=10000 HISTFILESIZE=200000
+unset LS_COLORS
 
 if ! shopt -oq posix && [ "$TERM" != dumb ]; then
 	if [ -f "${PREFIX:-/usr}"/share/bash-completion/bash_completion ]; then

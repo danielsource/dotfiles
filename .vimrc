@@ -14,9 +14,9 @@ set listchars=tab:>\ ,trail:·
 set timeoutlen=1000 ttimeoutlen=50
 set keywordprg=:Man
 set wildmenu wildmode=list:longest,full
-set showcmd
 set modeline exrc secure
 set textwidth=72
+set guioptions=
 
 " Undo setup!
 if !isdirectory($HOME."/.vim")
@@ -32,48 +32,55 @@ let g:mapleader = ' '
 let g:netrw_banner = 0
 let g:netrw_winsize = 15
 
-inoremap <C-s> <Cmd>update<CR>
-noremap <C-s> <Cmd>update<CR>
-inoremap <F5> <Cmd>make!<CR>
-nnoremap <F5> <Cmd>make!<CR>
-nnoremap <F6> <cmd>prev<CR>
-nnoremap <F7> <Cmd>n<CR>
-nnoremap <C-n> <Cmd>cn<CR>
-nnoremap <C-p> <Cmd>cp<CR>
-vnoremap . :normal .<CR>
-nnoremap <Leader>n <Cmd>set nu! rnu!<CR>
-nnoremap <Leader>c <Cmd>set cursorline! cursorcolumn!<CR>
-nnoremap <Leader>e <Cmd>Lex<CR>
-nnoremap <Leader>o <Cmd>set spell!<CR>
-nnoremap <Leader>s vip:sort<CR>
-vnoremap <Leader>s <Cmd>sort<CR>
+inoremap <C-s> <cmd>update<cr>
+noremap <C-s> <cmd>update<cr>
+inoremap <F5> <cmd>make!<cr>
+nnoremap <F5> <cmd>make!<cr>
+nnoremap <F6> <cmd>prev<cr>
+nnoremap <F7> <cmd>n<cr>
+nnoremap <C-n> <cmd>cn<cr>
+nnoremap <C-p> <cmd>cp<cr>
+vnoremap . :normal .<cr>
+nnoremap <leader>n <cmd>set nu! rnu!<cr>
+nnoremap <leader>c <cmd>set cursorline! cursorcolumn!<cr>
+nnoremap <leader>e <cmd>Lex<cr>
+nnoremap <leader>o <cmd>set spell!<cr>
+nnoremap <leader>g :vim "" **<left><left><left><left>
+nnoremap <leader>T <cmd>vimgrep "\<TODO\>"**<cr>
+nnoremap <leader>s vip:sort<cr>
+vnoremap <leader>s <cmd>sort<cr>
 
-nnoremap <Leader>h :wincmd h<CR>
-nnoremap <Leader>j :wincmd j<CR>
-nnoremap <Leader>k :wincmd k<CR>
-nnoremap <Leader>l :wincmd l<CR>
 
-nnoremap g1 :1wincmd w<CR>
-nnoremap g2 :2wincmd w<CR>
-nnoremap g3 :3wincmd w<CR>
-nnoremap g4 :4wincmd w<CR>
-nnoremap g5 :5wincmd w<CR>
-nnoremap g6 :6wincmd w<CR>
-nnoremap g7 :7wincmd w<CR>
+nnoremap <leader>h :wincmd h<cr>
+nnoremap <leader>j :wincmd j<cr>
+nnoremap <leader>k :wincmd k<cr>
+nnoremap <leader>l :wincmd l<cr>
 
-nnoremap <Leader>1 :tabnext 1<CR>
-nnoremap <Leader>2 :tabnext 2<CR>
-nnoremap <Leader>3 :tabnext 3<CR>
-nnoremap <Leader>4 :tabnext 4<CR>
-nnoremap <Leader>5 :tabnext 5<CR>
-nnoremap <Leader>6 :tabnext 6<CR>
-nnoremap <Leader>7 :tabnext 7<CR>
-nnoremap <Leader>8 :tabnext 8<CR>
-nnoremap <Leader>9 :tabnext 9<CR>
+nnoremap g1 :1wincmd w<cr>
+nnoremap g2 :2wincmd w<cr>
+nnoremap g3 :3wincmd w<cr>
+nnoremap g4 :4wincmd w<cr>
+nnoremap g5 :5wincmd w<cr>
+nnoremap g6 :6wincmd w<cr>
+nnoremap g7 :7wincmd w<cr>
+
+nnoremap <leader>1 :tabnext 1<cr>
+nnoremap <leader>2 :tabnext 2<cr>
+nnoremap <leader>3 :tabnext 3<cr>
+nnoremap <leader>4 :tabnext 4<cr>
+nnoremap <leader>5 :tabnext 5<cr>
+nnoremap <leader>6 :tabnext 6<cr>
+nnoremap <leader>7 :tabnext 7<cr>
+nnoremap <leader>8 :tabnext 8<cr>
+nnoremap <leader>9 :tabnext 9<cr>
+
+au FileType c,cpp nnoremap <leader>p oprintf("%\n", );<esc>6hi
 
 syn on
-if hostname() == 'desktop1'
-	colorscheme lunaperche
+if hostname() == '530x'
+	colorscheme habamax
+elseif hostname() == 'desktop1-win'
+	colorscheme peachpuff
 endif
 
 function! g:PleaseRemoveMatchParen()
