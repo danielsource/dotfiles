@@ -145,8 +145,7 @@ if ! shopt -oq posix && [ "$TERM" != dumb ]; then
 		. "${PREFIX:-/usr}"/share/fzf/key-bindings.bash
 	fi
 
-	if [ -f "${PREFIX:-/usr}"/share/bash-completion/completions/git ]; then
-		. "${PREFIX:-/usr}"/share/bash-completion/completions/git
+	if command -v __git_complete >/dev/null; then
 		alias g=git;		__git_complete g __git_main
 		alias ga='git add';	__git_complete ga _git_add
 		alias gb='git branch';	__git_complete gb _git_branch

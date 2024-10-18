@@ -13,7 +13,7 @@
 
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (unless (file-exists-p custom-file)
-  (write-region "" nil custom-file))
+        (write-region "" nil custom-file))
 (load custom-file nil t)
 
 (if (not custom-enabled-themes)
@@ -65,12 +65,19 @@
 (add-hook 'server-after-make-frame-hook
           (lambda () (select-frame-set-input-focus (selected-frame))))
 
+(defun kill-other-buffers ()
+  "Kill all other buffers."
+  (interactive)
+  (mapc 'kill-buffer (delq (current-buffer) (buffer-list))))
+
 (global-set-key (kbd "<f1>") 'save-buffer)
 (global-set-key (kbd "C-c c") 'compile)
 (global-set-key (kbd "<f5>") 'recompile)
+(global-set-key (kbd "<f8>") (lookup-key global-map (kbd "C-x b")))
 (global-set-key (kbd "<f9>") 'imenu)
 (global-set-key (kbd "C-c f") 'find-name-dired)
 (global-set-key (kbd "C-c r") 'recentf-open-files)
+(global-set-key (kbd "C-c a k") 'kill-other-buffers)
 (global-set-key (kbd "C-x m") 'man)
 (global-set-key (kbd "C-z") 'undo)
 (global-set-key (kbd "C-S-z") 'undo-redo)
@@ -82,6 +89,7 @@
 (global-set-key (kbd "M-4") (lookup-key global-map (kbd "C-x 4")))
 (global-set-key (kbd "M-5") (lookup-key global-map (kbd "C-x 5")))
 (global-set-key (kbd "M--") (lookup-key global-map (kbd "C-x t")))
+(global-set-key (kbd "M-- -") 'other-tab-prefix)
 (global-set-key (kbd "M-0") 'delete-window)
 (global-set-key (kbd "M-<left>") 'previous-buffer)
 (global-set-key (kbd "M-<right>") 'next-buffer)

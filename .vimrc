@@ -50,7 +50,6 @@ nnoremap <leader>T <cmd>vimgrep "\<TODO\>"**<cr>
 nnoremap <leader>s vip:sort<cr>
 vnoremap <leader>s <cmd>sort<cr>
 
-
 nnoremap <leader>h :wincmd h<cr>
 nnoremap <leader>j :wincmd j<cr>
 nnoremap <leader>k :wincmd k<cr>
@@ -77,7 +76,7 @@ nnoremap <leader>9 :tabnext 9<cr>
 au FileType c,cpp nnoremap <leader>p oprintf("%\n", );<esc>6hi
 
 syn on
-if hostname() == '530x'
+if hostname() == '530x' || hostname() == 'localhost'
 	colorscheme habamax
 elseif hostname() == 'desktop1-win'
 	colorscheme peachpuff
