@@ -10,7 +10,7 @@ fi
 [[ $- != *i* ]] && return
 
 shopt -s checkwinsize histappend extglob autocd
-stty -ixon # disable Ctrl-s freeze
+[ "$TERM" != dumb ] && stty -ixon # disable Ctrl-s freeze
 
 alias e='${EDITOR:-vi}'
 alias ls='LC_COLLATE=C ls --color --group-directories-first'
@@ -113,6 +113,20 @@ function open_file {
 	done
 }
 
+function man_web {
+	local base_url="http://man.he.net/?topic="
+	local target_cmd="${1:?No command specified}"
+	local target_url="${base_url}${target_cmd}&section=${2:-all}"
+	curl -v --silent "${target_url}" 2>&1 | sed -n "/<PRE>/,/<\/PRE>/p"
+}
+
+if ! command -v man >/dev/null; then
+	function man {
+		local out=$(man_web "$@")
+		[ -n "$out" ] && echo "$out" | less
+	}
+fi
+
 PS1='${exitcode}\W\$ '
 
 PROMPT_COMMAND='exitcode=$?; if [ $exitcode -ne 0 ]; then exitcode="$exitcode "; else unset exitcode; fi'
@@ -147,6 +161,13 @@ if ! shopt -oq posix && [ "$TERM" != dumb ]; then
 
 	if [ -f "${PREFIX:-/usr}"/share/bash-completion/completions/git ]; then
 		. "${PREFIX:-/usr}"/share/bash-completion/completions/git
+	fi
+
+	if [ -f "${PREFIX:-/usr}"/share/git/git-prompt.sh ]; then
+		. "${PREFIX:-/usr}"/share/git/git-prompt.sh
+	fi
+
+	if command -v __git_complete >/dev/null; then
 		alias g=git;		__git_complete g __git_main
 		alias ga='git add';	__git_complete ga _git_add
 		alias gb='git branch';	__git_complete gb _git_branch

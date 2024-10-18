@@ -28,7 +28,7 @@
       disabled-command-function nil
       completion-show-help nil
       read-file-name-completion-ignore-case t
-      dired-listing-switches "-al --group-directories-first"
+      dired-listing-switches "-alB --group-directories-first"
       global-auto-revert-non-file-buffers t
       vc-follow-symlinks t
       history-length 1000
@@ -47,7 +47,7 @@
 (global-auto-revert-mode 1)
 
 (global-display-line-numbers-mode 1)
-(setq display-line-numbers-type 'relative)
+(setq display-line-numbers-type 'visual)
 
 (blink-cursor-mode -1)
 (ffap-bindings)
@@ -57,20 +57,52 @@
 (setq ido-everywhere t
       ido-enable-flex-matching t
       ido-use-filename-at-point 'guess
-      ido-create-new-buffer 'always)
+      ido-create-new-buffer 'always
+      ido-use-url-at-point t)
 (ido-mode 1)
 
+(add-hook 'dired-mode-hook
+          (lambda ()
+            (when (bound-and-true-p ido-use-filename-at-point)
+              (setq-local ido-use-filename-at-point nil))))
 (add-hook 'before-save-hook
           #'delete-trailing-whitespace)
 (add-hook 'server-after-make-frame-hook
           (lambda () (select-frame-set-input-focus (selected-frame))))
 
-(global-set-key (kbd "<f1>") 'save-buffer)
-(global-set-key (kbd "C-c c") 'compile)
-(global-set-key (kbd "<f5>") 'recompile)
-(global-set-key (kbd "<f9>") 'imenu)
+(defun kill-other-buffers ()
+  "Kill all other buffers."
+  (interactive)
+  (mapc 'kill-buffer (delq (current-buffer) (buffer-list))))
+
+(defun delete-line ()
+  "Delete whole line without modifying the kill ring."
+  (interactive)
+  (if (save-excursion
+        (move-end-of-line 1)
+        (eobp))
+      (progn
+        (delete-region (point-at-bol) (point-at-eol))
+        (error "End of buffer")))
+  (next-line)
+  (save-excursion
+    (previous-line)
+    (delete-region (point-at-bol) (point-at-eol))
+    (delete-char 1)))
+
+(define-globalized-minor-mode global-dired-hide-details-mode dired-hide-details-mode
+  dired-hide-details-mode
+  :predicate '(dired-mode)
+  :group 'dired)
+
+(global-set-key (kbd "<f1>") 'execute-extended-command)
+(global-set-key (kbd "<f2>") (lookup-key global-map (kbd "C-x C-f")))
+(global-set-key (kbd "<f3>") 'compile)
+(global-set-key (kbd "<f4>") 'recompile)
+(global-set-key (kbd "<f9>") (lookup-key global-map (kbd "C-x b")))
 (global-set-key (kbd "C-c f") 'find-name-dired)
 (global-set-key (kbd "C-c r") 'recentf-open-files)
+(global-set-key (kbd "C-c a k") 'kill-other-buffers)
 (global-set-key (kbd "C-x m") 'man)
 (global-set-key (kbd "C-z") 'undo)
 (global-set-key (kbd "C-S-z") 'undo-redo)
@@ -82,7 +114,14 @@
 (global-set-key (kbd "M-4") (lookup-key global-map (kbd "C-x 4")))
 (global-set-key (kbd "M-5") (lookup-key global-map (kbd "C-x 5")))
 (global-set-key (kbd "M--") (lookup-key global-map (kbd "C-x t")))
+(global-set-key (kbd "M-- M--") 'other-tab-prefix)
 (global-set-key (kbd "M-0") 'delete-window)
 (global-set-key (kbd "M-<left>") 'previous-buffer)
 (global-set-key (kbd "M-<right>") 'next-buffer)
 (global-set-key (kbd "C-,") 'duplicate-dwim)
+(global-set-key (kbd "C-.") 'delete-line)
+(global-set-key (kbd "C-;") 'dabbrev-expand)
+
+(require 'dired)
+(define-key dired-mode-map (kbd "(") 'global-dired-hide-details-mode)
+(define-key dired-mode-map [mouse-2] 'dired-mouse-find-file)

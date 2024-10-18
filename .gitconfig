@@ -3,11 +3,15 @@
 	name = daniel.source
 [init]
 	defaultBranch = main
+[core]
+	editor = emacs
+	autocrlf = input
 [credential "https://github.com"]
 	helper = !gh auth git-credential
-[color "diff"]
-	meta = blue
 [include]
 	path = ~/.gitinfo
+[color "diff"]
+	meta = blue
 [alias]
+	c = commit --no-edit --allow-empty-message
 	adog = log --all --decorate --oneline --graph
