@@ -22,29 +22,33 @@
 (setq inhibit-startup-screen t
       initial-scratch-message ""
       ring-bell-function 'ignore
-      tab-always-indent 'complete
+      use-dialog-box nil
       compilation-ask-about-save nil
       compilation-scroll-output t
       disabled-command-function nil
       completion-show-help nil
       read-file-name-completion-ignore-case t
-      dired-listing-switches "-alB --group-directories-first"
-      global-auto-revert-non-file-buffers t
+      confirm-nonexistent-file-or-buffer nil
       vc-follow-symlinks t
       history-length 1000
-      inferior-lisp-program "sbcl")
+      dired-listing-switches "-alB --group-directories-first"
+      inferior-lisp-program "sbcl"
+      revert-without-query '(".*\\.tga")
+      compile-command nil)
 
-(setq-default tab-width 4
+(setq-default tab-4 width
               indent-tabs-mode nil
-              c-basic-offset 4)
-(setq-default confirm-nonexistent-file-or-buffer nil)
+              c-basic-offset 4
+              tab-always-indent 'complete)
 
 (recentf-mode 1)
 (savehist-mode 1)
 (save-place-mode 1)
 (column-number-mode 1)
 (delete-selection-mode 1)
+
 (global-auto-revert-mode 1)
+(setq global-auto-revert-non-file-buffers t)
 
 (global-display-line-numbers-mode 1)
 (setq display-line-numbers-type 'visual)
@@ -67,13 +71,19 @@
               (setq-local ido-use-filename-at-point nil))))
 (add-hook 'before-save-hook
           #'delete-trailing-whitespace)
+(add-hook 'before-save-hook
+          (lambda () (setq-local imenu--index-alist nil)))
 (add-hook 'server-after-make-frame-hook
           (lambda () (select-frame-set-input-focus (selected-frame))))
 
-(defun kill-other-buffers ()
-  "Kill all other buffers."
+(defun kill-not-visible-buffers ()
   (interactive)
-  (mapc 'kill-buffer (delq (current-buffer) (buffer-list))))
+  (let ((visible-buffers (mapcar 'window-buffer (window-list))))
+    (mapc (lambda (buf)
+            (unless (or (eq buf (current-buffer))
+                        (member buf visible-buffers))
+              (kill-buffer buf)))
+          (buffer-list))))
 
 (defun delete-line ()
   "Delete whole line without modifying the kill ring."
@@ -99,10 +109,18 @@
 (global-set-key (kbd "<f2>") (lookup-key global-map (kbd "C-x C-f")))
 (global-set-key (kbd "<f3>") 'compile)
 (global-set-key (kbd "<f4>") 'recompile)
+(global-set-key (kbd "<f5>") 'windmove-left)
+(global-set-key (kbd "<f6>") 'windmove-down)
+(global-set-key (kbd "<f7>") 'windmove-up)
+(global-set-key (kbd "<f8>") 'windmove-right)
+(global-set-key (kbd "S-<f5>") 'windmove-swap-states-left)
+(global-set-key (kbd "S-<f6>") 'windmove-swap-states-down)
+(global-set-key (kbd "S-<f7>") 'windmove-swap-states-up)
+(global-set-key (kbd "S-<f8>") 'windmove-swap-states-right)
 (global-set-key (kbd "<f9>") (lookup-key global-map (kbd "C-x b")))
 (global-set-key (kbd "C-c f") 'find-name-dired)
 (global-set-key (kbd "C-c r") 'recentf-open-files)
-(global-set-key (kbd "C-c a k") 'kill-other-buffers)
+(global-set-key (kbd "C-c a k") 'kill-not-visible-buffers)
 (global-set-key (kbd "C-x m") 'man)
 (global-set-key (kbd "C-z") 'undo)
 (global-set-key (kbd "C-S-z") 'undo-redo)
@@ -121,6 +139,7 @@
 (global-set-key (kbd "C-,") 'duplicate-dwim)
 (global-set-key (kbd "C-.") 'delete-line)
 (global-set-key (kbd "C-;") 'dabbrev-expand)
+(global-set-key (kbd "C-M-;") 'join-line)
 
 (require 'dired)
 (define-key dired-mode-map (kbd "(") 'global-dired-hide-details-mode)
