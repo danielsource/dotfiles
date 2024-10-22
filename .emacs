@@ -1,3 +1,7 @@
+;; ============================================
+;; Simply the greatest emacs config of all time
+;; ============================================
+
 (set-language-environment "UTF-8")
 
 (if (fboundp 'scroll-bar-mode)
@@ -10,6 +14,11 @@
 (add-to-list 'default-frame-alist '(left . 0))
 (add-to-list 'default-frame-alist '(height . 28))
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+(when (eq system-type 'windows-nt)
+  (setq ls-lisp-use-string-collate nil
+        find-program "\"c:/Program Files/Git/usr/bin/find.exe\"")
+  (set-face-attribute 'default nil :font "Consolas" :height 98 :width 'normal))
 
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (unless (file-exists-p custom-file)
@@ -36,7 +45,7 @@
       revert-without-query '(".*\\.tga")
       compile-command nil)
 
-(setq-default tab-4 width
+(setq-default tab-width 4
               indent-tabs-mode nil
               c-basic-offset 4
               tab-always-indent 'complete)
@@ -88,12 +97,11 @@
 (defun delete-line ()
   "Delete whole line without modifying the kill ring."
   (interactive)
-  (if (save-excursion
-        (move-end-of-line 1)
-        (eobp))
-      (progn
-        (delete-region (point-at-bol) (point-at-eol))
-        (error "End of buffer")))
+  (when (save-excursion
+          (move-end-of-line 1)
+          (eobp))
+    (delete-region (point-at-bol) (point-at-eol))
+    (error "End of buffer"))
   (next-line)
   (save-excursion
     (previous-line)
@@ -119,6 +127,8 @@
 (global-set-key (kbd "S-<f8>") 'windmove-swap-states-right)
 (global-set-key (kbd "<f9>") (lookup-key global-map (kbd "C-x b")))
 (global-set-key (kbd "C-c f") 'find-name-dired)
+(global-set-key (kbd "C-c g") 'find-grep)
+(global-set-key (kbd "C-c h") 'rgrep)
 (global-set-key (kbd "C-c r") 'recentf-open-files)
 (global-set-key (kbd "C-c a k") 'kill-not-visible-buffers)
 (global-set-key (kbd "C-x m") 'man)
