@@ -46,7 +46,7 @@ nnoremap <leader>c <cmd>set cursorline! cursorcolumn!<cr>
 nnoremap <leader>e <cmd>Lex<cr>
 nnoremap <leader>o <cmd>set spell!<cr>
 nnoremap <leader>g :vim "" **<left><left><left><left>
-nnoremap <leader>T <cmd>vimgrep "\<TODO\>"**<cr>
+nnoremap <leader>T <cmd>vimgrep "\<TODO\>" **<cr>
 nnoremap <leader>s vip:sort<cr>
 vnoremap <leader>s <cmd>sort<cr>
 
@@ -76,19 +76,5 @@ nnoremap <leader>9 :tabnext 9<cr>
 au FileType c,cpp nnoremap <leader>p oprintf("%\n", );<esc>6hi
 
 syn on
-if hostname() == 'desktop1-win' ||
-			\ hostname() == '530x' ||
-			\ hostname() == 'localhost'
-	colorscheme habamax
-endif
-
-function! g:PleaseRemoveMatchParen()
-	set noshowmatch
-	if exists(":NoMatchParen")
-		:NoMatchParen
-	endif
-endfunction
-augroup plugin_initialize
-	autocmd!
-	autocmd VimEnter * call PleaseRemoveMatchParen()
-augroup END
+colorscheme industry
+set bg=dark

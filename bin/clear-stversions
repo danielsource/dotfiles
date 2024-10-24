@@ -1,0 +1,16 @@
+#!/bin/bash
+
+PREFIX=${PREFIX:-$HOME}
+
+shopt -s nullglob
+
+files=("$PREFIX"/Documents/.stversions/* "$PREFIX"/Documents/.stversions/.[!.*]
+	"$PREFIX"/Downloads/.stversions/* "$PREFIX"/Downloads/.stversions/.[!.*]
+	"$PREFIX"/Music/.stversions/* "$PREFIX"/Music/.stversions/.[!.*]
+	"$PREFIX"/Pictures/Camera/.stversions/* "$PREFIX"/Pictures/Camera/.stversions/.[!.*]
+	"$PREFIX"/Pictures/Screenshots/.stversions/* "$PREFIX"/Pictures/Screenshots/.stversions/.[!.*])
+
+for f in "${files[@]}"
+do
+	rm -rfv "$f"
+done
