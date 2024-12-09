@@ -144,7 +144,7 @@ function c {
         return
     fi
     if [ -f "$1" ]; then
-        ${CC:-tcc} -std=c99 -Wall -Wextra -Wpedantic -g -Og -o "${1%%.c}" "$@"
+        ${CC:-tcc} -std=c99 -Wall -Wextra -Wpedantic -g -O0 -o "${1%%.c}" "$@"
         return
     fi
     local code=$1
