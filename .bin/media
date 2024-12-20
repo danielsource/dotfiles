@@ -1,0 +1,11 @@
+#!/bin/sh
+
+case $1 in
+vol+) wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05+ ;;
+vol-) wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05- ;;
+mute) wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle ;;
+next) playerctl next && notify-send -t 300 -u low 'Next media' ;;
+prev) playerctl previous && notify-send -t 300 -u low 'Previous media' ;;
+pause) playerctl play-pause ;;
+*) exit 1 ;;
+esac

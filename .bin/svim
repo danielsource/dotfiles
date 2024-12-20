@@ -1,0 +1,3 @@
+#!/bin/sh
+
+exec vim -Z -n -u NONE -i NONE -c 'set nocompatible secure history=0 noswapfile noundofile nomodeline noshelltemp nobackup nowritebackup' "$@"

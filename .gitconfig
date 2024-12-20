@@ -1,0 +1,8 @@
+[init]
+	defaultBranch = main
+[color "diff"]
+	meta = blue
+[alias]
+	nomsg = commit --allow-empty-message --no-edit
+[include]
+	path = ~/docs/misc/gitconfig.txt
