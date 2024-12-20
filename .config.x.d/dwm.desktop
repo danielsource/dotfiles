@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=dwm
+Comment=dynamic window manager
+Exec=dwmrun
+Icon=dwm
+Type=Application

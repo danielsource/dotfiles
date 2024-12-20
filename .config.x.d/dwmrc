@@ -1,0 +1,29 @@
+#!/bin/sh
+
+case $(uname -n) in
+desktop1)
+	export QT_QPA_PLATFORMTHEME=kde
+	/usr/lib/x86_64-linux-gnu/libexec/polkit-kde-authentication-agent-1 &
+	;;
+530x|a315)
+	{ sleep 5; while :; do
+		if ! id=$(battery-notify "$id" 2>&1 >/dev/null); then
+			break
+		fi
+		sleep 600
+	done } &
+
+	setxkbmap -layout br -option 'caps:escape_shifted_capslock,compose:menu'
+	;;
+*)
+	setxkbmap -layout br -option 'caps:escape_shifted_capslock,compose:menu'
+	;;
+esac
+
+xsetroot \
+	-name "$USER" \
+	-cursor_name left_ptr \
+	-bg '#141313' -fg '#262626' -mod 16 16
+xrdb -merge ~/.config.x.d/xresources
+systemctl start --user xfce4-notifyd.service &
+exec dwm

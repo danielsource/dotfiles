@@ -1,0 +1,13 @@
+#!/bin/sh
+
+if [ $# -eq 0 ]; then
+	exit 1
+fi
+
+for cmd in /etc/alternatives/open xdg-open; do
+	if command -v "$cmd" >/dev/null; then
+		exec setsid "$cmd" "$@" 2>/dev/null
+	fi
+done
+
+exit 2

@@ -1,0 +1,12 @@
+/*
+
+!/bin
+/bin/prog[a-z]
+
+!/.config.*.d
+
+!/.vim
+/.vim/*
+!/.vim/after
+!/.vim/colors
+!/.vim/*.vim
