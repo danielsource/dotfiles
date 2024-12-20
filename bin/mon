@@ -1,0 +1,8 @@
+#!/bin/sh
+
+set -e
+
+case $1 in
+	off) playerctl stop; sleep 0.5s; exec xset dpms force off ;;
+	*)   exit 2 ;;
+esac
