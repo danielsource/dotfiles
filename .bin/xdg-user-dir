@@ -1,0 +1,10 @@
+#!/bin/sh
+
+case $1 in
+*[[:punct:]]*) set -- INVALID ;;
+esac
+
+if [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/user-dirs.dirs" ]; then
+	. "${XDG_CONFIG_HOME:-$HOME/.config}/user-dirs.dirs"
+fi
+eval echo \${XDG_${1}_DIR:-$HOME}

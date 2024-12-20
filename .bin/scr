@@ -1,0 +1,3 @@
+#!/bin/sh
+
+exec scrot -q 85 "$(xdg-user-dir DESKTOP)/%Y-%m-%d-%H%M%S.jpg"
