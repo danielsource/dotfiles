@@ -1,0 +1,4 @@
+#!/bin/sh
+slock &
+echo zzz
+sleep 2s && systemctl suspend

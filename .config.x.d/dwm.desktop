@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=dwm
+Comment=dynamic window manager
+Exec=/bin/sh -c "$HOME/.config.x.d/dwmrc"
+Icon=dwm
+Type=Application

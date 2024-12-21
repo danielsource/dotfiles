@@ -1,0 +1,27 @@
+[user]
+	name = Daniel de Lima Franceschetti
+	email = 0xfeedcafe@proton.me
+[init]
+	defaultBranch = main
+	templateDir = ~/.git_repo_template
+[core]
+	autocrlf = input
+[color "diff"]
+	meta = blue
+[alias]
+	k = commit --no-edit --allow-empty-message --no-gpg-sign --all
+	s = status --short --branch
+	l = log --compact-summary
+	b = branch --list --all -vv
+	w = switch
+	d = diff
+	dw = diff --word-diff
+	dc = diff --cached
+	dcw = diff --cached --word-diff
+	wc = whatchanged
+	sh = show
+	shw = show --word-diff
+	adog = log --all --decorate --oneline --graph
+	gsed = !git ls-files -z | xargs -0 sed -i -e
+[include]
+	path = ~/docs/gitconfig
