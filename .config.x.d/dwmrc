@@ -1,0 +1,7 @@
+#!/bin/sh
+
+xsetroot -name "$USER"
+xrdb -merge ~/.Xresources
+dunst &
+feh --no-fehbg --bg-tile ~/.tile &
+exec dwm

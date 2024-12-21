@@ -1,0 +1,38 @@
+Xft.antialias: 1
+Xft.hinting: 1
+Xft.rgba: rgb
+Xft.hintstyle: hintslight
+Xft.lcdfilter: lcddefault
+
+#define clr_00 #2d2d2d
+#define clr_01 #d88d6a
+#define clr_02 #99cc99
+#define clr_03 #ffcc66
+#define clr_04 #6699cc
+#define clr_05 #cc99cc
+#define clr_06 #66cccc
+#define clr_07 #d3d0c8
+#define clr_08 #908379
+#define clr_09 #f26c75
+#define clr_15 #ffffff
+
+*.foreground: clr_07
+*.background: clr_00
+*.cursorColor: clr_15
+
+*.color0:  clr_00
+*.color1:  clr_01
+*.color2:  clr_02
+*.color3:  clr_03
+*.color4:  clr_04
+*.color5:  clr_05
+*.color6:  clr_06
+*.color7:  clr_07
+*.color8:  clr_08
+*.color9:  clr_09
+*.color10: clr_02
+*.color11: clr_03
+*.color12: clr_04
+*.color13: clr_05
+*.color14: clr_06
+*.color15: clr_15
