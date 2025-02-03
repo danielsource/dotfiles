@@ -17,7 +17,6 @@ set history=1000
 set mouse=a
 set undofile
 set modeline noexrc secure
-set spellfile=~/sync/misc/vim-spell/en.utf-8.add,~/sync/misc/vim-spell/pt.utf-8.add
 
 set keywordprg=:Man
 runtime ftplugin/man.vim

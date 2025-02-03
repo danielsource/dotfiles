@@ -15,7 +15,9 @@ case "$TERM" in
 xterm-color|*-256color)
 	c_git='\[\e[31m\]'
 	c_path='\[\e[1;34m\]'
-	c_err='\[\e[1;30m\]'
+	if [ -z "$VIM_TERMINAL" ]; then
+		c_err='\[\e[1;30m\]'
+	fi
 	c_clr='\[\e[0m\]'
 	;;
 esac
@@ -43,8 +45,12 @@ if ! shopt -oq posix; then
 	fi
 fi
 
-if ! command -v __git_ps1 >/dev/null && [ -r ~/.git-prompt.sh ]; then
-	source ~/.git-prompt.sh || __git_ps1() { :; }
+if ! command -v __git_ps1 >/dev/null; then
+	if [ -r ~/.git-prompt.sh ]; then
+		source ~/.git-prompt.sh || __git_ps1() { :; }
+	else
+		__git_ps1() { :; }
+	fi
 fi
 
 colors() {

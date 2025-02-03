@@ -114,12 +114,16 @@ static const Key keys[] = {
 	{ 0, XF86XK_AudioMute,         spawn,        SHCMD("wpctl set-mute   @DEFAULT_AUDIO_SINK@ toggle") },
 	{ 0, XF86XK_AudioPlay,         spawn,        SHCMD("playerctl play-pause") },
 	{ 0, XF86XK_AudioNext,         spawn,        SHCMD("playerctl next") },
+	{ 0, XF86XK_Forward,           spawn,        SHCMD("playerctl next") },
 	{ 0, XF86XK_AudioPrev,         spawn,        SHCMD("playerctl previous") },
+	{ 0, XF86XK_Back,              spawn,        SHCMD("playerctl previous") },
 	{ 0, XF86XK_AudioStop,         spawn,        SHCMD("playerctl stop") },
-	{ 0, XF86XK_Explorer,          spawn,        SHCMD("myprog1") },
-	{ 0, XF86XK_Search,            spawn,        SHCMD("myprog2") },
-	{ 0, XF86XK_Calculator,        spawn,        SHCMD("myprog3") },
-	{ 0, XF86XK_Tools,             spawn,        SHCMD("myprog4") },
+	{ 0, XF86XK_Explorer,          spawn,        SHCMD("proga") },
+	{ 0, XF86XK_HomePage,          spawn,        SHCMD("proga") },
+	{ 0, XF86XK_Search,            spawn,        SHCMD("progb") },
+	{ 0, XF86XK_Calculator,        spawn,        SHCMD("progc") },
+	{ 0, XF86XK_Mail,              spawn,        SHCMD("progc") },
+	{ 0, XF86XK_Tools,             spawn,        SHCMD("progd") },
 };
 
 /* button definitions */
