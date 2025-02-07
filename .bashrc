@@ -30,7 +30,7 @@ PS1="$c_clr$c_err\$?$c_clr $c_git\$(__git_ps1 '%s ')$c_clr$c_path\W$c_clr % "
 unset c_git c_path c_err c_clr
 
 case "$TERM" in
-xterm*|rxvt*|tmux*)
+xterm*|rxvt*|tmux-256color|st-256color)
 	PS1="\[\e]0;\u@\h: \w\a\]$PS1"
 	;;
 *)
@@ -102,30 +102,6 @@ longbasename() {
 	}'
 }
 
-open() {
-	xdg-open "$@" 2>>~/open.log &
-}
-
-trash() {
-	local legacypath=~/.local/share/Trash/files
-
-	if [ $# -le 0 ]; then
-		return 1
-	elif [ $1 = -empty ]; then
-		echo 'emptying...'
-		rm -rf ~/trash ~/.local/share/Trash/info
-		return
-	fi
-
-	if ! [ -d ~/trash ] && ! [ -L "$legacypath" ]; then
-		mv -v "$legacypath" ~/trash
-		ln -vsr ~/trash "$legacypath"
-	fi
-
-	mkdir -p ~/trash
-	mv -vb -t ~/trash "$@"
-}
-
 # wpctl wrapper
 wp() {
 	local default=SINK
@@ -181,7 +157,7 @@ USAGE_END
 
 alias sudo='sudo '
 alias ls='LC_COLLATE=C ls --color=auto --group-directories-first'
-alias l='ls -la'
+alias l='ls -lahG'
 
 export GPG_TTY=$(tty)
 
@@ -190,4 +166,9 @@ if [ -d "$MY_PICO_PATH" ]; then
 	PATH=$PATH:$MY_PICO_PATH/picotool/picotool
 	export PICO_SDK_PATH=$MY_PICO_PATH/pico-sdk
 	export PICOTOOL_FETCH_FROM_GIT_PATH=$MY_PICO_PATH/picotool
+fi
+
+MY_GO_PATH=/usr/local/go
+if [ -d "$MY_GO_PATH" ]; then
+	PATH=$PATH:$MY_GO_PATH/bin
 fi

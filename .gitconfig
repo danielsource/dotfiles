@@ -18,7 +18,6 @@
 	dw = diff --word-diff
 	dc = diff --cached
 	dcw = diff --cached --word-diff
-	wc = whatchanged
 	sh = show
 	shw = show --word-diff
 	adog = log --all --decorate --oneline --graph
