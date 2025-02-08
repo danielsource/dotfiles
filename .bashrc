@@ -65,6 +65,16 @@ colors() {
 	printf '\n'
 }
 
+asciigraph() {
+	cat <<-'EOF'
+	ABCDEFGHIJKLMNOPQRSTUVWXYZ 01234
+	abcdefghijklmnopqrstuvwxyz 56789
+	!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
+	the quick brown fox jumps over the lazy dog
+	THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG
+	EOF
+}
+
 datediff() {
 	local d1 d2
 	if [ $# -eq 1 ]; then
@@ -140,17 +150,17 @@ wp() {
 		wpctl set-mute "$@" toggle ;;
 	s) shift 1 && wpctl set-default "$@" ;;
 	*)
-		cat << 'USAGE_END'
-usage: wp [cmd [args...]]
-       wp                   # status
-       wp g                 # get volume
-       wp g ID              # get volume
-       wp v VOL[%][-|+]     # set volume
-       wp v ID VOL[%][-|+]  # set volume
-       wp m                 # toggle mute
-       wp m ID              # toggle mute
-       wp s ID              # set default sink/source
-USAGE_END
+		cat <<-'USAGE_END'
+	usage: wp [cmd [args...]]
+	       wp                   # status
+	       wp g                 # get volume
+	       wp g ID              # get volume
+	       wp v VOL[%][-|+]     # set volume
+	       wp v ID VOL[%][-|+]  # set volume
+	       wp m                 # toggle mute
+	       wp m ID              # toggle mute
+	       wp s ID              # set default sink/source
+	USAGE_END
 	return 1 ;;
 	esac
 }
@@ -158,6 +168,7 @@ USAGE_END
 alias sudo='sudo '
 alias ls='LC_COLLATE=C ls --color=auto --group-directories-first'
 alias l='ls -lahG'
+alias loc="find . -type f -name '*.c' -exec grep ';\s*$' {} + | wc -l"
 
 export GPG_TTY=$(tty)
 

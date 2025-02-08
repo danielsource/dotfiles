@@ -8,10 +8,11 @@ set textwidth=74 formatoptions+=lj
 set incsearch hlsearch
 set autowrite
 set splitright splitbelow
+set completeopt=menuone,preview,longest
 set wildmenu wildmode=list:longest,full
 set ruler showcmd
 set nrformats-=octal
-set cinoptions=t0,:0,g0
+set cinoptions=c0,t0,:0,g0
 set title titlestring=\%(%m\ %)%t
 set history=1000
 set mouse=a
@@ -65,3 +66,5 @@ if has('termguicolors') && $TERM !~# '^screen.*'
 else
 	colorscheme slate
 endif
+
+au! BufRead,BufNewFile *.inc set ft=cpp
