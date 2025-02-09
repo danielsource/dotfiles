@@ -27,15 +27,17 @@ let g:c_no_curly_error = 1
 let loaded_matchparen = 1
 
 let g:mapleader = ' '
-nn <leader>1 :tabnext 1<cr>
-nn <leader>2 :tabnext 2<cr>
-nn <leader>3 :tabnext 3<cr>
-nn <leader>4 :tabnext 4<cr>
-nn <leader>5 :tabnext 5<cr>
-nn <leader>6 :tabnext 6<cr>
-nn <leader>7 :tabnext 7<cr>
-nn <leader>8 :tabnext 8<cr>
-nn <leader>9 :tabnext 9<cr>
+nnoremap <silent> <leader>1 :silent! :tabnext 1<cr>
+nnoremap <silent> <leader>2 :silent! :tabnext 2<cr>
+nnoremap <silent> <leader>3 :silent! :tabnext 3<cr>
+nnoremap <silent> <leader>4 :silent! :tabnext 4<cr>
+nnoremap <silent> <leader>5 :silent! :tabnext 5<cr>
+nnoremap <silent> <leader>6 :silent! :tabnext 6<cr>
+nnoremap <silent> <leader>7 :silent! :tabnext 7<cr>
+nnoremap <silent> <leader>8 :silent! :tabnext 8<cr>
+nnoremap <silent> <leader>9 :silent! :tabnext 9<cr>
+
+autocmd! BufRead,BufNewFile *.inc set ft=cpp
 
 if !has('nvim')
 	if !isdirectory($HOME.'/.vim')
@@ -66,5 +68,3 @@ if has('termguicolors') && $TERM !~# '^screen.*'
 else
 	colorscheme slate
 endif
-
-au! BufRead,BufNewFile *.inc set ft=cpp
