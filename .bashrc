@@ -119,7 +119,7 @@ wp() {
 		wpctl status
 		return
 	fi
-	if [ $1 = -mic ]; then
+	if [ $1 = -m ]; then
 		default=SOURCE
 		shift 1 || return
 	fi
@@ -151,7 +151,7 @@ wp() {
 	s) shift 1 && wpctl set-default "$@" ;;
 	*)
 		cat <<-'USAGE_END'
-	usage: wp [cmd [args...]]
+	usage: wp [-m] [cmd [args...]]
 	       wp                   # status
 	       wp g                 # get volume
 	       wp g ID              # get volume

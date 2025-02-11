@@ -3,6 +3,5 @@
 xsetroot -name "$USER"
 xrdb -merge ~/.Xresources
 dunst &
-picom --vsync &
 feh --no-fehbg --bg-tile ~/.tile &
 exec dwm

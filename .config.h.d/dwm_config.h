@@ -105,7 +105,9 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_f,      togglefullscreen, {0} },
 
 	/* my linux shortcuts */
-	{ MODKEY|ShiftMask, XK_l,      spawn,        SHCMD("slock") },
+	{ MODKEY|ShiftMask, XK_l,      spawn,        SHCMD("slock & mon-off") },
+	{ MODKEY|ShiftMask, XK_m,      spawn,        SHCMD("mon-off") },
+	{ 0,                XK_Print,  spawn,        SHCMD("scr") },
 	{ 0, XF86XK_MonBrightnessUp,   spawn,        SHCMD("brightnessctl s 5%+") }, /* remember to get backlight permission */
 	{ 0, XF86XK_MonBrightnessDown, spawn,        SHCMD("brightnessctl s 5%-") },
 	{ 0, XF86XK_AudioRaiseVolume,  spawn,        SHCMD("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+") },
