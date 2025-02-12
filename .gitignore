@@ -2,4 +2,8 @@
 
 !/bin
 !/.config.*.d
+
+!/.vim
+/.vim/*
+!/.vim/after
 !/.vim/colors
