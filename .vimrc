@@ -19,14 +19,12 @@ set mouse=a
 set undofile
 set modeline noexrc secure
 
-set keywordprg=:Man
-runtime ftplugin/man.vim
-
 let g:netrw_banner = 0
 let g:c_no_curly_error = 1
 let loaded_matchparen = 1
 
 let g:mapleader = ' '
+nnoremap <leader>n :set nu! rnu!<cr>
 nnoremap <silent> <leader>1 :silent! :tabnext 1<cr>
 nnoremap <silent> <leader>2 :silent! :tabnext 2<cr>
 nnoremap <silent> <leader>3 :silent! :tabnext 3<cr>
@@ -38,6 +36,7 @@ nnoremap <silent> <leader>8 :silent! :tabnext 8<cr>
 nnoremap <silent> <leader>9 :silent! :tabnext 9<cr>
 
 autocmd! BufRead,BufNewFile *.inc set ft=cpp
+autocmd! FileType c,cpp nnoremap <leader>m i#include<space>"u.h"<cr><cr>int<cr>main(int<space>argc,<space>char<space>*argv[])<cr>{<cr>if<space>(argc<space>!=<space>2)<cr>return 1;<cr>return<space>0;<cr>}<esc>8k
 
 if !has('nvim')
 	if !isdirectory($HOME.'/.vim')
@@ -68,3 +67,6 @@ if has('termguicolors') && $TERM !~# '^screen.*'
 else
 	colorscheme slate
 endif
+
+set keywordprg=:Man
+runtime ftplugin/man.vim

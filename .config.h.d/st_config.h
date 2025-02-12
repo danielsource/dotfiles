@@ -1,11 +1,9 @@
-/* A st 0.9.2 config file. */
-
 /*
  * appearance
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "Liberation Mono:pixelsize=12:antialias=true:autohint=true";
+static char *font = "monospace:size=9";
 static int borderpx = 2;
 
 /*
