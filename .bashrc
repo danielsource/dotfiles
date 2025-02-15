@@ -11,6 +11,15 @@ HISTCONTROL=ignoreboth
 HISTSIZE=1000
 HISTFILESIZE=10000
 
+if ! shopt -oq posix; then
+	if [ -f /usr/share/bash-completion/bash_completion ]; then
+		. /usr/share/bash-completion/bash_completion
+	fi
+	if [ -f /usr/share/doc/fzf/examples/key-bindings.bash ]; then
+		. /usr/share/doc/fzf/examples/key-bindings.bash
+	fi
+fi
+
 case "$TERM" in
 xterm-color|*-256color)
 	c_git='\[\e[31m\]'
@@ -22,12 +31,15 @@ xterm-color|*-256color)
 	;;
 esac
 
-GIT_PS1_STATESEPARATOR=''
-GIT_PS1_HIDE_IF_PWD_IGNORED=t
+if command -v __git_ps1 >/dev/null; then
+	git_prompt='$(__git_ps1 "%s ")'
+	GIT_PS1_STATESEPARATOR=''
+	GIT_PS1_HIDE_IF_PWD_IGNORED=t
+fi
 
-PS1="$c_clr$c_err\$?$c_clr $c_git\$(__git_ps1 '%s ')$c_clr$c_path\W$c_clr % "
+PS1="$c_clr$c_err\$?$c_clr $c_git$git_prompt$c_clr$c_path\W$c_clr % "
 
-unset c_git c_path c_err c_clr
+unset c_git c_path c_err c_clr git_prompt
 
 case "$TERM" in
 xterm*|rxvt*|tmux-256color|st-256color)
@@ -37,30 +49,22 @@ xterm*|rxvt*|tmux-256color|st-256color)
 	;;
 esac
 
-if ! shopt -oq posix; then
-	if [ -f /usr/share/bash-completion/bash_completion ]; then
-		. /usr/share/bash-completion/bash_completion
-	elif [ -f /etc/bash_completion ]; then
-		. /etc/bash_completion
-	fi
-fi
-
-if ! command -v __git_ps1 >/dev/null; then
-	if [ -r ~/.git-prompt.sh ]; then
-		source ~/.git-prompt.sh || __git_ps1() { :; }
-	else
-		__git_ps1() { :; }
-	fi
-fi
-
 colors() {
 	printf '\x1b[38;2;255;100;0mTRUECOLOR\x1b[0m\n'
 	for i in {0..7}; do
-		printf '\e[48;5;%sm %2d \e[0m ' $i $i
+		printf '\e[1;4%dm %2d \e[0m ' $i $i
 	done
 	printf '\n'
-	for i in {8..15}; do
-		printf '\e[48;5;%sm %2d \e[0m ' $i $i
+	for i in {0..7}; do
+		printf '\e[10%dm %2d \e[0m ' $i $i
+	done
+	printf '\n'
+	for i in {0..7}; do
+		printf '\e[3%dm %2d \e[0m ' $i $i
+	done
+	printf '\n'
+	for i in {0..7}; do
+		printf '\e[1;3%dm %2d \e[0m ' $i $i
 	done
 	printf '\n'
 }
@@ -89,7 +93,7 @@ datediff() {
 }
 
 lastmod() {
-	find "$@" \( -path ./.cache/mozilla -or -path ./.mozilla \) -prune -or -type f -print0 |
+	find "$@" \( -path ./.cache/mozilla -o -path ./.mozilla \) -prune -o -type f -print0 |
 		xargs -0 stat --format '%Y :%y %n' |
 		sort -nr | cut -d: -f2-
 }
@@ -168,6 +172,7 @@ wp() {
 alias sudo='sudo '
 alias ls='LC_COLLATE=C ls --color=auto --group-directories-first'
 alias l='ls -lahG'
+alias gdb='gdb -q'
 alias loc="find . -type f -name '*.c' -exec grep ';\s*$' {} + | wc -l"
 
 export GPG_TTY=$(tty)

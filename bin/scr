@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -e
-mkdir -p ~/scr
-cd ~/scr
+mkdir -p ~/sync/screenshots
+cd ~/sync/screenshots
 
-scrot 'scr-%y%m%d-%H%M%S.png'
+scrot "$(datetime)".png

@@ -1,0 +1,25 @@
+#!/bin/sh
+
+: "${CC:=gcc}"
+: "${STD:=c99}"
+
+case $CC in
+	gcc) extra_flags="-std=$STD -fanalyzer" ;;
+	clang) extra_flags="-Weverything -std=$STD" ;;
+	tcc) extra_flags=-Wunsupported ;;
+	*) unset extra_flags ;;
+esac
+
+case $CC in
+	gcc|clang) extra_flags="$extra_flags -fsanitize=address,leak,undefined" ;;
+esac
+
+set -x
+$CC -O0 -g3 \
+	-Wall -Wextra -Wpedantic -Wvla \
+	-Wno-unused-parameter \
+	-Wno-unused-function \
+	-Wno-implicit-fallthrough \
+	-Wno-missing-prototypes \
+	-Wno-padded \
+	$extra_flags "$@"

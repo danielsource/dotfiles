@@ -18,25 +18,45 @@ set history=1000
 set mouse=a
 set undofile
 set modeline noexrc secure
+set spelllang=en,pt_br
 
 let g:netrw_banner = 0
+let g:netrw_cursor = 0
 let g:c_no_curly_error = 1
 let loaded_matchparen = 1
 
 let g:mapleader = ' '
-nnoremap <leader>n :set nu! rnu!<cr>
-nnoremap <silent> <leader>1 :silent! :tabnext 1<cr>
-nnoremap <silent> <leader>2 :silent! :tabnext 2<cr>
-nnoremap <silent> <leader>3 :silent! :tabnext 3<cr>
-nnoremap <silent> <leader>4 :silent! :tabnext 4<cr>
-nnoremap <silent> <leader>5 :silent! :tabnext 5<cr>
-nnoremap <silent> <leader>6 :silent! :tabnext 6<cr>
-nnoremap <silent> <leader>7 :silent! :tabnext 7<cr>
-nnoremap <silent> <leader>8 :silent! :tabnext 8<cr>
-nnoremap <silent> <leader>9 :silent! :tabnext 9<cr>
+
+nnoremap <silent> <F1> :make<CR>
+nnoremap <silent> <F2> <Nop>
+nnoremap <silent> <F3> <Nop>
+nnoremap <silent> <F4> :set spell!<CR>
+nnoremap <silent> <C-S> :update<CR>
+
+nnoremap <silent> g1 :silent! 1wincmd w<CR>
+nnoremap <silent> g2 :silent! 2wincmd w<CR>
+nnoremap <silent> g3 :silent! 3wincmd w<CR>
+nnoremap <silent> g4 :silent! 4wincmd w<CR>
+nnoremap <silent> g5 :silent! 5wincmd w<CR>
+nnoremap <silent> g6 :silent! 6wincmd w<CR>
+nnoremap <silent> g7 :silent! 7wincmd w<CR>
+
+nnoremap <silent> <Leader>1 :silent! :tabnext 1<CR>
+nnoremap <silent> <Leader>2 :silent! :tabnext 2<CR>
+nnoremap <silent> <Leader>3 :silent! :tabnext 3<CR>
+nnoremap <silent> <Leader>4 :silent! :tabnext 4<CR>
+nnoremap <silent> <Leader>5 :silent! :tabnext 5<CR>
+nnoremap <silent> <Leader>6 :silent! :tabnext 6<CR>
+nnoremap <silent> <Leader>7 :silent! :tabnext 7<CR>
+nnoremap <silent> <Leader>8 :silent! :tabnext 8<CR>
+nnoremap <silent> <Leader>9 :silent! :tabnext 9<CR>
 
 autocmd! BufRead,BufNewFile *.inc set ft=cpp
-autocmd! FileType c,cpp nnoremap <leader>m i#include<space>"u.h"<cr><cr>int<cr>main(int<space>argc,<space>char<space>*argv[])<cr>{<cr>if<space>(argc<space>!=<space>2)<cr>return 1;<cr>return<space>0;<cr>}<esc>8k
+autocmd! FileType c,cpp nnoremap <Leader>m i#include<Space>"u.h"<CR><CR>int<CR>main(int<Space>argc,<Space>char<Space>*argv[])<CR>{<CR>if<Space>(argc<Space>!=<Space>2)<CR>return 1;<CR>return<Space>0;<CR>}<Esc>8k
+autocmd! FileType c,cpp nnoremap <Leader>d :vimgrep/^<C-R><C-W>/*.c<CR>
+
+set keywordprg=:Man
+runtime ftplugin/man.vim
 
 if !has('nvim')
 	if !isdirectory($HOME.'/.vim')
@@ -57,16 +77,4 @@ if !has('nvim')
 	set ttimeoutlen=50
 endif
 
-if has('termguicolors') && $TERM !~# '^screen.*'
-	try
-		colorscheme eighties
-		set termguicolors
-	catch /^Vim\%((\a\+)\)\=:E185:/
-		colorscheme slate
-	endtry
-else
-	colorscheme slate
-endif
-
-set keywordprg=:Man
-runtime ftplugin/man.vim
+colorscheme process

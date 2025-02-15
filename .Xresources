@@ -4,15 +4,15 @@ Xft.rgba: rgb
 Xft.hintstyle: hintslight
 Xft.lcdfilter: lcddefault
 
-#define clr_00 #2d2d2d
+#define clr_00 #1c1c1c
 #define clr_01 #d88d6a
-#define clr_02 #99cc99
-#define clr_03 #ffcc66
-#define clr_04 #6699cc
-#define clr_05 #cc99cc
-#define clr_06 #66cccc
-#define clr_07 #d3d0c8
-#define clr_08 #908379
+#define clr_02 #8ba769
+#define clr_03 #d8a541
+#define clr_04 #6394df
+#define clr_05 #a77ba7
+#define clr_06 #69b7b7
+#define clr_07 #dbcbc2
+#define clr_08 #7a7266
 #define clr_09 #f26c75
 #define clr_15 #ffffff
 
