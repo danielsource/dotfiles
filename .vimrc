@@ -57,16 +57,7 @@ if !has('nvim')
 	set ttimeoutlen=50
 endif
 
-if has('termguicolors') && $TERM !~# '^screen.*'
-	try
-		colorscheme eighties
-		set termguicolors
-	catch /^Vim\%((\a\+)\)\=:E185:/
-		colorscheme slate
-	endtry
-else
-	colorscheme slate
-endif
-
 set keywordprg=:Man
 runtime ftplugin/man.vim
+
+colorscheme process

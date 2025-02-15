@@ -56,11 +56,19 @@ fi
 colors() {
 	printf '\x1b[38;2;255;100;0mTRUECOLOR\x1b[0m\n'
 	for i in {0..7}; do
-		printf '\e[48;5;%sm %2d \e[0m ' $i $i
+		printf '\e[1;4%dm %2d \e[0m ' $i $i
 	done
 	printf '\n'
-	for i in {8..15}; do
-		printf '\e[48;5;%sm %2d \e[0m ' $i $i
+	for i in {0..7}; do
+		printf '\e[10%dm %2d \e[0m ' $i $i
+	done
+	printf '\n'
+	for i in {0..7}; do
+		printf '\e[3%dm %2d \e[0m ' $i $i
+	done
+	printf '\n'
+	for i in {0..7}; do
+		printf '\e[1;3%dm %2d \e[0m ' $i $i
 	done
 	printf '\n'
 }

@@ -91,27 +91,39 @@ char *termname = "st-256color";
  */
 unsigned int tabspaces = 8;
 
+#define clr_00 "#1c1c1c"
+#define clr_01 "#d88d6a"
+#define clr_02 "#8ba769"
+#define clr_03 "#d8a541"
+#define clr_04 "#6394df"
+#define clr_05 "#a77ba7"
+#define clr_06 "#69b7b7"
+#define clr_07 "#dbcbc2"
+#define clr_08 "#7a7266"
+#define clr_09 "#f26c75"
+#define clr_15 "#ffffff"
+
 /* Terminal colors (16 first used in escape sequence) */
 static const char *colorname[] = {
 	/* 8 normal colors */
-	[ 0] = "#2d2d2d",
-	[ 1] = "#d88d6a",
-	[ 2] = "#99cc99",
-	[ 3] = "#ffcc66",
-	[ 4] = "#6699cc",
-	[ 5] = "#cc99cc",
-	[ 6] = "#66cccc",
-	[ 7] = "#d3d0c8",
+	[ 0] = clr_00,
+	[ 1] = clr_01,
+	[ 2] = clr_02,
+	[ 3] = clr_03,
+	[ 4] = clr_04,
+	[ 5] = clr_05,
+	[ 6] = clr_06,
+	[ 7] = clr_07,
 
 	/* 8 bright colors */
-	[ 8] = "#908379",
-	[ 9] = "#f26c75",
-	[10] = "#99cc99",
-	[11] = "#ffcc66",
-	[12] = "#6699cc",
-	[13] = "#cc99cc",
-	[14] = "#66cccc",
-	[15] = "#ffffff",
+	[ 8] = clr_08,
+	[ 9] = clr_09,
+	[10] = clr_02,
+	[11] = clr_03,
+	[12] = clr_04,
+	[13] = clr_05,
+	[14] = clr_06,
+	[15] = clr_15,
 
 	[255] = 0,
 
