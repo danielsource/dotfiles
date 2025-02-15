@@ -59,13 +59,19 @@ hi! link DiffDelete DiffChange
 hi Comment        ctermfg=2  ctermbg=NONE  ctermul=NONE cterm=NONE
 hi Constant       ctermfg=1  ctermbg=NONE  ctermul=NONE cterm=NONE
 hi Underlined     ctermfg=5  ctermbg=NONE  ctermul=NONE cterm=underline
-hi Todo           ctermfg=3  ctermbg=0     ctermul=NONE cterm=underline
+hi Todo           ctermfg=3  ctermbg=NONE  ctermul=NONE cterm=underline
 hi Statement      ctermfg=7  ctermbg=NONE  ctermul=NONE cterm=NONE
-hi! link Identifier Normal
-hi! link Statement Identifier
+hi! link SpecialComment Comment
 hi! link Special Constant
 hi! link SpecialKey Special
+hi! link Identifier Normal
+hi! link Delimiter Identifier
+hi! link Statement Identifier
 hi! link Type Identifier
 hi! link PreProc Identifier
 hi! link cPreProc Comment
 hi! link cPreCondit cPreProc
+hi! link shQuote Constant
+hi! link shShellVariables Constant
+hi! link javaScriptValue Constant
+hi! link sqlSpecial Identifier

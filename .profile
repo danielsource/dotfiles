@@ -1,6 +1,7 @@
 umask 077
 
 export EDITOR=/usr/bin/vim
+export FZF_DEFAULT_OPTS='--no-color'
 
 if [ -n "$BASH_VERSION" ]; then
 	if [ -f "$HOME/.bashrc" ]; then
