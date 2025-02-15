@@ -9,7 +9,7 @@
 [color "diff"]
 	meta = blue
 [alias]
-	k = commit --no-edit --allow-empty-message --no-gpg-sign --all
+	k = commit --no-edit --allow-empty-message --no-gpg-sign
 	s = status --short --branch
 	l = log --compact-summary
 	b = branch --list --all -vv
