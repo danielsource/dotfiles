@@ -1,0 +1,12 @@
+#!/bin/sh
+
+set -e
+
+fmt='%(title)s.%(ext)s'
+
+case $1 in
+album) fmt='%(album_artist)s-%(album)s-%(track_number)02d-%(track)s.%(ext)s' && shift ;;
+playlist) fmt='%(artist)s-%(album)s-%(playlist_index)02d-%(title)s.%(ext)s' && shift ;;
+esac
+
+exec yt-dlp -x -f bestaudio --embed-metadata --restrict-filenames -o "$fmt" "$@"

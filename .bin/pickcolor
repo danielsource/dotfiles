@@ -1,0 +1,7 @@
+#!/bin/sh
+
+export LC_ALL=C
+
+dbus-send --print-reply --dest=org.gnome.Shell.Screenshot \
+	--type=method_call /org/gnome/Shell/Screenshot org.gnome.Shell.Screenshot.PickColor |
+	awk 'BEGIN{printf "#"} $1 ~ /double/ {printf "%02x", $2 * 255} END{print ""}'

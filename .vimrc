@@ -1,91 +1,63 @@
-filetype plugin indent on
+filetype plugin on
 
-set fileformats=unix,dos fileformat=unix
-set tabstop=8 shiftwidth=8 noexpandtab
+set nocompatible
+set autoindent
 set number relativenumber
-set textwidth=74 formatoptions+=lj
-set incsearch hlsearch
-set autowrite
+set linebreak
+set backspace=indent,eol,start
 set splitright splitbelow
-set completeopt=menuone,preview,longest
-set wildmenu wildmode=list:longest,full
-set ruler showcmd
-set nrformats-=octal
-set cinoptions=c0,t0,:0,g0
+set showcmd ruler
 set laststatus=1
-set title titlestring=\%(%m\ %)%t
-set history=1000
-set mouse=a
-set undofile
-set nomodeline noexrc secure
-set spelllang=en,pt_br
+set completeopt=menu,longest,preview
+set path-=/usr/include, path+=src/**
+set wildmenu wildmode=list:longest,full
+set wildignore=*.o,*.obj,*.a,*.lib,*.so,*.dll,*.out,*.exe,*.class
+set nrformats-=octal
+set autowrite
+set clipboard^=unnamed,unnamedplus
+set title titlestring=%(%m\ %)%t
+set directory=~/.vim/swap
+set undofile undodir=~/.vim/undo
 
-let g:netrw_banner = 0
-let g:netrw_cursor = 0
-let g:c_no_curly_error = 1
-let g:sh_no_error = 1
-let loaded_matchparen = 1
-let loaded_netrw = 1
-let loaded_netrwPlugin = 1
+let loaded_matchparen=1
+let g:netrw_banner=0
+let g:sh_no_error=1
 
-let g:mapleader = ' '
+if !isdirectory($HOME.'/.vim/swap') | call mkdir($HOME.'/.vim/swap', 'p', 0700) | endif
+if !isdirectory($HOME.'/.vim/undo') | call mkdir($HOME.'/.vim/undo', 'p', 0700) | endif
 
-nnoremap <silent> <F1> :make!<CR>
-nnoremap <silent> <F2> <Nop>
-nnoremap <silent> <F3> <Nop>
-nnoremap          <F4> :set spell!<CR>
-nnoremap <silent> <C-S> :update<CR>
+ino <C-s> <C-o>:update<CR>
+nn <C-s> :update<CR>
+nn <F5> :make<CR>
+nn <Space>n :setlocal number! relativenumber!<CR>
+nn <Space>0 :tabnext #<CR>
+nn <Space>1 :tabnext 1<CR>
+nn <Space>2 :tabnext 2<CR>
+nn <Space>3 :tabnext 3<CR>
+nn <Space>4 :tabnext 4<CR>
+nn <Space>5 :tabnext 5<CR>
+nn <Space>6 :tabnext 6<CR>
+nn <Space>7 :tabnext 7<CR>
+nn <Space>8 :tabnext 8<CR>
+nn <Space>9 :tabnext $<CR>
+nn g1 :1wincmd w<CR>
+nn g2 :2wincmd w<CR>
+nn g3 :3wincmd w<CR>
+nn g4 :4wincmd w<CR>
+nn g5 :5wincmd w<CR>
+nn g6 :6wincmd w<CR>
 
-nnoremap <silent> g1 :silent! 1wincmd w<CR>
-nnoremap <silent> g2 :silent! 2wincmd w<CR>
-nnoremap <silent> g3 :silent! 3wincmd w<CR>
-nnoremap <silent> g4 :silent! 4wincmd w<CR>
-nnoremap <silent> g5 :silent! 5wincmd w<CR>
-nnoremap <silent> g6 :silent! 6wincmd w<CR>
-nnoremap <silent> g7 :silent! 7wincmd w<CR>
+command DiffOrig vert new | set bt=nofile | file # (diff)
+	\ | r ++edit #
+	\ | 0d_ | diffthis | wincmd p | diffthis
 
-nnoremap <silent> <Leader>1 :silent! :tabnext 1<CR>
-nnoremap <silent> <Leader>2 :silent! :tabnext 2<CR>
-nnoremap <silent> <Leader>3 :silent! :tabnext 3<CR>
-nnoremap <silent> <Leader>4 :silent! :tabnext 4<CR>
-nnoremap <silent> <Leader>5 :silent! :tabnext 5<CR>
-nnoremap <silent> <Leader>6 :silent! :tabnext 6<CR>
-nnoremap <silent> <Leader>7 :silent! :tabnext 7<CR>
-nnoremap <silent> <Leader>8 :silent! :tabnext 8<CR>
-nnoremap <silent> <Leader>9 :silent! :tabnext 9<CR>
+augroup ftprefs
+	au!
+	au BufNewFile,BufRead *.c,*.h setlocal path+=/usr/local/include,/usr/include
+augroup END
 
-if !exists(':DiffOrig')
-	command DiffOrig vert new | set bt=nofile | file # (diff)
-		\ | r ++edit #
-		\ | 0d_ | diffthis | wincmd p | diffthis
-endif
-
-autocmd! BufRead,BufNewFile *.inc set ft=cpp
-
-if !has('nvim')
-	set keywordprg=:Man
-	runtime ftplugin/man.vim
-
-	if !isdirectory($HOME.'/.vim')
-		call mkdir($HOME.'/.vim', '', 0770)
-	endif
-	if !isdirectory($HOME.'/.vim/swap')
-		call mkdir($HOME.'/.vim/swap', '', 0700)
-	endif
-	if !isdirectory($HOME.'/.vim/undo')
-		call mkdir($HOME.'/.vim/undo', '', 0700)
-	endif
-	set viminfo+=n~/.vim/viminfo directory=~/.vim/swap// undodir=~/.vim/undo/
-
-	if maparg('<C-L>', 'n') ==# ''
-		nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
-	endif
-
-	set ttimeoutlen=50
-endif
-
-if filereadable($HOME.'/docs/vimrc')
-	execute 'source '.$HOME.'/docs/vimrc'
-else
-	runtime mycolors.vim
+if has('syntax')
+	syntax on
+	colorscheme habamax
+	hi Normal ctermbg=NONE
 endif

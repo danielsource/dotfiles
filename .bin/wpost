@@ -1,0 +1,38 @@
+#!/bin/sh
+
+# This script tries to do this in GNU Wget:
+# curl -F'file=@yourfile.png' https://0x0.st
+
+file=$1
+url=$2
+
+if [ -z "$file" ] || [ ! -f "$file" ]; then
+	echo "Usage: $0 <file-to-upload> [url]" >&2
+	exit 1
+fi
+
+if [ -z "$2" ]; then
+	url=https://0x0.st
+fi
+
+boundary="------------------------$(date +%s%N)"
+tmpfile="$(mktemp)"
+
+{
+	printf '%s\r\n' "--$boundary"
+	printf 'Content-Disposition: form-data; name="file"; filename="%s"\r\n' "$(basename "$file")"
+	printf 'Content-Type: application/octet-stream\r\n'
+	printf '\r\n'
+	cat "$file"
+	printf '\r\n'
+	printf '%s\r\n' "--$boundary--"
+} > "$tmpfile"
+
+wget \
+	--header="Content-Type: multipart/form-data; boundary=$boundary" \
+	--post-file="$tmpfile" \
+	--quiet \
+	-O - \
+	"$url"
+
+rm -f "$tmpfile"
