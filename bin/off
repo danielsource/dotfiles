@@ -1,4 +1,0 @@
-#!/bin/sh
-
-lock &
-sleep 2s && exec systemctl poweroff

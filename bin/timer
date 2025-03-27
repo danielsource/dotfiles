@@ -1,3 +1,0 @@
-#!/bin/sh
-
-sleep "$1" && exec notify-send --urgency=critical "$(date '+%H:%M:%S')" "$2"

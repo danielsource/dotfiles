@@ -1,9 +1,0 @@
-#!/bin/sh
-
-export _JAVA_AWT_WM_NONREPARENTING=1
-
-if [ -r ~/.config.x.d/dwmrc ]; then
-	. ~/.config.x.d/dwmrc
-else
-	exec dwm
-fi

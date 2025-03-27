@@ -1,0 +1,3 @@
+#!/bin/sh
+
+pickcolor | xclip -r -se c

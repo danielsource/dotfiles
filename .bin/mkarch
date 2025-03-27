@@ -1,0 +1,32 @@
+#!/bin/sh
+
+set -e
+archdir=~/Downloads/archives
+mkdir -p "$archdir"
+
+for arg; do
+	case $arg in
+	-*) ;;
+	*) arg=$(realpath "$arg") ;;
+	esac
+	set -- "$@" "$arg"
+	shift
+done
+
+cd ~
+zip -q9r - Documents "$@" > "$archdir/$USER.zip.tmp"
+if [ -f ~/.pass ]; then
+	gpg --no-symkey-cache --decrypt ~/.pass |
+	gpg --no-symkey-cache --batch --output "$archdir/$USER.gpg" --passphrase-fd 0 \
+		--symmetric "$archdir/$USER.zip.tmp"
+	shred -u "$archdir/$USER.zip.tmp"
+fi
+
+cd ~/.var/app/org.prismlauncher.PrismLauncher/data/PrismLauncher/instances/vanilla/minecraft &&
+zip -q9r - saves screenshots servers.dat > "$archdir/minecraft.zip"
+
+cd "$archdir"
+if [ -f md5sum.txt ]; then
+	mv md5sum.txt md5sum.old.txt
+fi
+md5sum ./*.gpg ./*.zip > md5sum.txt
