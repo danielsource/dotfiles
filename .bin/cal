@@ -1,0 +1,7 @@
+#!/bin/sh
+
+if command -v ncal >/dev/null; then
+	exec ncal -C "$@"
+else
+	exec /usr/bin/cal "$@"
+fi

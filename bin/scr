@@ -1,8 +1,0 @@
-#!/bin/sh
-
-set -e
-
-mkdir -p ~/sync/screenshots
-cd ~/sync/screenshots
-
-exec scrot "$(datetime)".png

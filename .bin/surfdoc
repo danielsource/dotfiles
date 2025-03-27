@@ -1,0 +1,22 @@
+#!/bin/sh
+
+set -e
+
+findcmd=${SURFDOC_COMMAND:-"find opt/doc /usr/local/go/doc /usr/local/share/doc /usr/share/doc -type f -o -type l 2>/dev/null"}
+cache=~/.cache/surfdoc.txt
+
+if [ -f "$cache" ]; then
+	file=$(dmenu -i -l 24 -p "doc" "$@" < "$cache")
+else
+	file=$(eval "$findcmd" | tee "$cache" | dmenu -i -l 24 -p "doc" "$@")
+fi
+
+if [ ! -e "$file" ]; then
+	exit 1
+fi
+
+case $file in
+*.gz) gzip -d < "$file" > /tmp/surfdoc-"$USER".txt && file=/tmp/surfdoc-"$USER".txt ;;
+esac
+
+exec open "$file"
