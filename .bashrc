@@ -6,8 +6,8 @@ EDITOR=vim
 export GPG_TTY=$(tty)
 stty -ixon
 open() { setsid xdg-open "$@" 2>/dev/null; }
-tmux_here() { tmux new-session -As "$(printf %.\*s 7 "$(basename "$PWD" | tr -cd '[:alnum:]')")"; }
+tmux_here() { tmux new-session -As "$(printf '%.*s' 7 "$(basename "$PWD" | tr -cd '[:alnum:]')")"; }
 alias ls='LC_COLLATE=C ls --color=auto --group-directories-first'
 alias l='ls -lahG'
 alias o=open
-bind -x '"\C-g":"tmux_here"'
+bind -x '"\C-g":tmux_here'
