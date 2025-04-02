@@ -16,6 +16,7 @@ let loaded_matchparen=1
 let g:mapleader = ' '
 nn <f5> :make<cr>
 nn <leader>n :setlocal number! relativenumber!<cr>
+nn <leader>' :tabnext #<CR>
 nn <leader>1 :tabnext 1<CR>
 nn <leader>2 :tabnext 2<CR>
 nn <leader>3 :tabnext 3<CR>
@@ -24,7 +25,7 @@ nn <leader>5 :tabnext 5<CR>
 nn <leader>6 :tabnext 6<CR>
 nn <leader>7 :tabnext 7<CR>
 nn <leader>8 :tabnext 8<CR>
-nn <leader>9 :tabnext 9<CR>
+nn <leader>9 :tabnext $<CR>
 nn g1 :1wincmd w<CR>
 nn g2 :2wincmd w<CR>
 nn g3 :3wincmd w<CR>
