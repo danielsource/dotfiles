@@ -1,5 +1,6 @@
 set nocompatible
 set sts=4 sw=4 et ai
+set backspace=indent,eol,start
 set number relativenumber
 set wrap linebreak
 set splitright splitbelow
@@ -18,7 +19,7 @@ endif
 
 nn <f5> :make<cr>
 nn <space>n :setlocal number! relativenumber!<cr>
-nn <space>' :tabnext #<CR>
+nn <space>0 :tabnext #<CR>
 nn <space>1 :tabnext 1<CR>
 nn <space>2 :tabnext 2<CR>
 nn <space>3 :tabnext 3<CR>
@@ -34,7 +35,6 @@ nn g3 :3wincmd w<CR>
 nn g4 :4wincmd w<CR>
 nn g5 :5wincmd w<CR>
 nn g6 :6wincmd w<CR>
-nn g7 :7wincmd w<CR>
 
 if has('syntax')
     syntax on
