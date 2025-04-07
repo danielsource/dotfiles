@@ -1,8 +1,6 @@
 set nocompatible
 set sts=4 sw=4 et ai
 set backspace=indent,eol,start
-set number relativenumber
-set wrap linebreak
 set splitright splitbelow
 set showcmd ruler
 set laststatus=1
@@ -38,8 +36,5 @@ nn g6 :6wincmd w<CR>
 
 if has('syntax')
     syntax on
-    if has('termguicolors')
-        set termguicolors
-        colorscheme habamax
-    endif
+    colorscheme habamax
 endif
