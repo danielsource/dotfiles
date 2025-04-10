@@ -1,5 +1,5 @@
 set nocompatible
-set sts=4 sw=4 et ai
+set autoindent
 set backspace=indent,eol,start
 set splitright splitbelow
 set showcmd ruler
@@ -11,8 +11,8 @@ set autowrite
 set clipboard^=unnamed,unnamedplus
 
 if 1
-    let g:netrw_banner=0
-    let loaded_matchparen=1
+	let g:netrw_banner=0
+	let loaded_matchparen=1
 endif
 
 nn <f5> :make<cr>
@@ -35,6 +35,7 @@ nn g5 :5wincmd w<CR>
 nn g6 :6wincmd w<CR>
 
 if has('syntax')
-    syntax on
-    colorscheme habamax
+	syntax on
+	colorscheme habamax
+	hi Normal ctermbg=NONE
 endif

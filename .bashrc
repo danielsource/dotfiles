@@ -6,6 +6,7 @@ HISTFILESIZE=2000
 
 shopt -s histappend
 shopt -s checkwinsize
+stty -ixon
 
 case "$TERM" in
     xterm-color|*-256color) color_prompt=yes ;;

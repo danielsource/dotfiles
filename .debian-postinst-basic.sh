@@ -7,13 +7,13 @@ set -e
 apt install mg
 
 apt autopurge \
-    cheese \
     evolution \
     gnome-contacts \
     gnome-games \
     gnome-maps \
     gnome-music \
     gnome-weather \
+    gnome-text-editor \
     nano \
     synaptic \
     totem \
@@ -37,9 +37,9 @@ apt install \
     gcc-12-doc \
     gdb \
     gimp \
-    gpick \
     git \
     gparted \
+    gpick \
     kruler \
     libsdl2-dev \
     ltrace \
@@ -51,7 +51,6 @@ apt install \
     rename \
     scrot \
     shellcheck \
-    strace \
     strace \
     testdisk \
     time \
@@ -77,6 +76,7 @@ if ! [ -d .git ]; then
 fi
 
 cp .bashrc .profile /etc/skel
-cp .bashrc .profile "$HOME"
+cp .profile "$HOME/.profile"
+sed 's/32m/31m/' .bashrc > "$HOME/.bashrc"
 
 runuser "$username" -c 'git ls-files'
