@@ -1,6 +1,3 @@
-;; Delete this to hide the keybindings at the start:
-(add-hook 'after-init-hook 'help-quick)
-
 (load-theme 'modus-operandi)
 
 (if (fboundp 'menu-bar-mode)
@@ -45,7 +42,8 @@
 (column-number-mode t)
 (delete-selection-mode t)
 (windmove-default-keybindings 'control)
-(set-fringe-mode '(0 . 0))
+(when (display-graphic-p)
+  (set-fringe-mode '(0 . 0)))
 
 (global-set-key (kbd "<f5>") 'recompile)
 (global-set-key (kbd "C-z") 'undo)
