@@ -1,3 +1,6 @@
+;; Delete this to hide the keybindings at the start:
+(add-hook 'after-init-hook 'help-quick)
+
 (load-theme 'modus-operandi)
 
 (if (fboundp 'menu-bar-mode)
@@ -11,12 +14,14 @@
 
 (setq inhibit-startup-screen t
       initial-scratch-message ""
+      initial-major-mode 'fundamental-mode
       use-short-answers t
       ring-bell-function 'ignore
       compilation-ask-about-save nil
       disabled-command-function nil
       make-backup-files nil
-      tab-always-indent 'complete)
+      tab-always-indent 'complete
+      display-line-numbers-type 'relative)
 
 (setq-default cursor-type 'bar
               c-basic-offset 4
@@ -39,6 +44,8 @@
 (show-paren-mode -1)
 (column-number-mode t)
 (delete-selection-mode t)
+(windmove-default-keybindings 'control)
+(set-fringe-mode '(0 . 0))
 
 (global-set-key (kbd "<f5>") 'recompile)
 (global-set-key (kbd "C-z") 'undo)
@@ -46,6 +53,8 @@
 (global-set-key (kbd "C-c s") 'sort-lines)
 (global-set-key (kbd "C-c w") 'whitespace-cleanup)
 (global-set-key (kbd "C-c $") 'toggle-truncate-lines)
+(global-set-key (kbd "C-c n") 'global-display-line-numbers-mode)
+(global-set-key (kbd "C-c c") 'compile)
 (global-set-key (kbd "C-j") 'join-line)
 (global-set-key (kbd "C-x m") 'man)
 (global-set-key (kbd "M-o") 'other-window)
