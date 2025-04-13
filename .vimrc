@@ -1,5 +1,6 @@
 set nocompatible
 set autoindent
+set linebreak
 set backspace=indent,eol,start
 set splitright splitbelow
 set showcmd ruler

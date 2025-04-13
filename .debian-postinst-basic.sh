@@ -14,7 +14,6 @@ apt autopurge \
 	gnome-music \
 	gnome-text-editor \
 	gnome-weather \
-	nano \
 	synaptic \
 	totem \
 	vim-tiny \
@@ -29,6 +28,7 @@ apt install \
 	bmake \
 	bsdutils \
 	build-essential \
+	dnsmasq \
 	fzf \
 	gdb \
 	gimp \
@@ -51,6 +51,7 @@ apt install \
 	testdisk \
 	time \
 	tmux \
+	tree \
 	universal-ctags \
 	xclip \
 	xorg-dev \
