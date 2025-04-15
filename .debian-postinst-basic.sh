@@ -2,6 +2,48 @@
 
 set -e
 
+### Debian only ###
+if . /etc/os-release && [ "$ID" = debian ]
+then
+cat <<'EOF' > /etc/apt/preferences.d/block_contrib
+Package: *
+Pin: release o=Debian,a=stable,l=Debian,c=contrib
+Pin-Priority: -1
+EOF
+
+cat <<'EOF' > /etc/apt/preferences.d/block_non-free
+Package: *
+Pin: release o=Debian,a=stable,l=Debian,c=non-free
+Pin-Priority: -1
+EOF
+
+cat <<'EOF' > /etc/apt/preferences.d/allow_docs
+Package: manpages-posix
+Pin: release o=Debian,a=stable,l=Debian,c=non-free
+Pin-Priority: 600
+
+Package: manpages-posix-dev
+Pin: release o=Debian,a=stable,l=Debian,c=non-free
+Pin-Priority: 600
+
+Package: gcc-doc
+Pin: release o=Debian,a=stable,l=Debian,c=contrib
+Pin-Priority: 600
+
+Package: gcc-doc-base
+Pin: release o=Debian,a=stable,l=Debian,c=contrib
+Pin-Priority: 600
+
+Package: gcc-12-doc
+Pin: release o=Debian,a=stable,l=Debian,c=non-free
+Pin-Priority: 600
+EOF
+
+apt-add-repository contrib non-free
+
+fi
+### END Debian only ###
+
 apt update && apt upgrade
 
 apt install vim-gtk3
@@ -30,6 +72,7 @@ apt install \
 	build-essential \
 	dnsmasq \
 	fzf \
+	gcc-doc \
 	gdb \
 	gimp \
 	git \
@@ -38,6 +81,7 @@ apt install \
 	kruler \
 	libsdl2-dev \
 	ltrace \
+	manpages-posix-dev \
 	mat2 \
 	mpv \
 	nasm \
