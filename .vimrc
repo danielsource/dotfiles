@@ -1,5 +1,6 @@
 set nocompatible
 set autoindent
+set number relativenumber
 set linebreak
 set backspace=indent,eol,start
 set splitright splitbelow
