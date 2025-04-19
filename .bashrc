@@ -6,29 +6,21 @@ HISTFILESIZE=2000
 PROMPT_DIRTRIM=3
 
 shopt -s histappend
-shopt -s checkwinsize
+shopt -s extglob
+shopt -s globskipdots
 stty -ixon
 
 case "$TERM" in
-	xterm-color|*-256color) color_prompt=yes ;;
-esac
-
-if [ "$color_prompt" = yes ]; then
-	PS1='($?) \[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-else
-	PS1='($?) \u@\h:\w\$ '
-fi
-unset color_prompt
-
-case "$TERM" in
 xterm*|rxvt*|tmux*)
+	PS1='\[\033[00m\]($?) \[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 	PS1="\[\e]0;${debian_chroot:+($debian_chroot) }\u@\h: \W\a\]$PS1"
 	;;
 *)
+	PS1='($?) \u@\h:\w\$ '
 	;;
 esac
 
-if ! shopt -oq posix; then
+if [ "$(id -u)" -ne 0 ] && ! shopt -oq posix; then
 	if [ -f "${PREFIX:-/usr}"/share/bash-completion/bash_completion ]; then
 		. "${PREFIX:-/usr}"/share/bash-completion/bash_completion
 	elif [ -f /etc/bash_completion ]; then

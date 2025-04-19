@@ -1,0 +1,17 @@
+#!/bin/sh
+
+set -e
+archdir=~/Downloads/archives
+mkdir -p "$archdir"
+
+cd ~
+zip -q9r - Documents > "$archdir/$USER.zip"
+
+cd .var/app/org.prismlauncher.PrismLauncher/data/PrismLauncher/instances/vanilla/minecraft &&
+zip -q9r - saves screenshots > "$archdir/minecraft.zip"
+
+cd "$archdir"
+if [ -f md5sum.txt ]; then
+	mv md5sum.txt md5sum.old.txt
+fi
+md5sum ./*.zip > md5sum.txt

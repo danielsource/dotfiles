@@ -2,6 +2,11 @@
 
 set -e
 
+if [ "$(id -u)" -ne 0 ]; then
+	echo "Must be root" >&2
+	exit 1
+fi
+
 ### Debian only ###
 if . /etc/os-release && [ "$ID" = debian ]
 then

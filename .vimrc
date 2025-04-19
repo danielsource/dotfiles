@@ -13,6 +13,7 @@ set wildignore=*.o,*.obj,*.a,*.lib,*.so,*.dll,*.out,*.exe,*.class
 set nrformats-=octal
 set autowrite
 set clipboard^=unnamed,unnamedplus
+set title titlestring=\%(%m\ %)%t
 
 if 1
 	let g:netrw_banner=0
