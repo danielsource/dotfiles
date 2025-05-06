@@ -1,21 +1,6 @@
 [init]
 	defaultBranch = main
-	templateDir = ~/.git_repo_template
-[core]
-	autocrlf = input
 [color "diff"]
 	meta = blue
-[alias]
-	k = commit --no-gpg-sign -m.
-	s = status --short --branch
-	l = log --compact-summary
-	b = branch --list --all -vv
-	w = switch
-	d = diff
-	dw = diff --word-diff
-	dc = diff --cached
-	dcw = diff --cached --word-diff
-	sh = show
-	shw = show --word-diff
-	adog = log --all --decorate --oneline --graph
-	gsed = !git ls-files -z | xargs -0 sed -i -e
+[include]
+	path = ~/Documents/misc/gitconfig.txt

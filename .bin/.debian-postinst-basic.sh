@@ -56,10 +56,6 @@ Pin-Priority: 600
 Package: gdb-doc
 Pin: release o=Debian,a=stable,l=Debian,c=non-free
 Pin-Priority: 600
-
-Package: emacs-common-non-dfsg
-Pin: release o=Debian,a=stable,l=Debian,c=non-free
-Pin-Priority: 600
 EOF
 
 apt-add-repository contrib non-free
@@ -93,8 +89,6 @@ apt install \
 	build-essential \
 	cpp-doc \
 	curl \
-	emacs-common-non-dfsg \
-	emacs-gtk \
 	ffmpeg \
 	fzf \
 	gcc-doc \

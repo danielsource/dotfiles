@@ -14,7 +14,6 @@ set wildmenu wildmode=list:longest,full
 set wildignore=*.o,*.obj,*.a,*.lib,*.so,*.dll,*.out,*.exe,*.class
 set nrformats-=octal
 set autowrite
-set clipboard^=unnamed,unnamedplus
 set title titlestring=%(%m\ %)%t
 set directory=~/.vim/swap
 set undofile undodir=~/.vim/undo
