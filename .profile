@@ -1,6 +1,8 @@
 #umask 022
 
 export FZF_DEFAULT_OPTS=--no-color
+export EDITOR=vim
+export SUDO_EDITOR=svim
 
 if [ -n "$BASH_VERSION" ]; then
 	if [ -f "$HOME/.bashrc" ]; then

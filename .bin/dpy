@@ -1,0 +1,18 @@
+#!/bin/sh
+
+case $1 in
+off)
+	sleep 0.3
+	if [ "$XDG_SESSION_TYPE" = x11 ]; then
+		exec xset dpms force off
+	else
+		exec dbus-send --dest=org.gnome.ScreenSaver --type=method_call \
+			/org/gnome/ScreenSaver \
+			org.gnome.ScreenSaver.SetActive \
+			boolean:true
+	fi
+	;;
+*)
+	exit 1
+	;;
+esac

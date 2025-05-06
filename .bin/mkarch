@@ -1,8 +1,21 @@
 #!/bin/sh
 
+userdir() {
+	path=$(xdg-user-dir "$1")
+	if [ "$(dirname "$path")" = "$HOME" ]; then
+		basename "$path"
+	else
+		echo "$path"
+	fi
+}
+
 set -e
-archdir=~/Downloads/archives
-mkdir -p "$archdir"
+
+arch_dir=$(realpath "$(userdir DOWNLOAD)/archives")
+prism_dir=~/.var/app/org.prismlauncher.PrismLauncher/data/PrismLauncher/instances/vanilla/minecraft
+gpg_arch=$arch_dir/$USER.gpg
+mc_arch=$arch_dir/minecraft.zip
+tmp_arch=$USER.zip.tmp
 
 for arg; do
 	case $arg in
@@ -14,19 +27,29 @@ for arg; do
 done
 
 cd ~
-zip -q9r - Documents "$@" > "$archdir/$USER.zip.tmp"
+mkdir -p "$arch_dir"
+
+zip -q9r - "$(userdir DOCUMENTS)" "$@" > "$tmp_arch"
 if [ -f ~/.pass ]; then
 	gpg --no-symkey-cache --decrypt ~/.pass |
-	gpg --no-symkey-cache --batch --output "$archdir/$USER.gpg" --passphrase-fd 0 \
-		--symmetric "$archdir/$USER.zip.tmp"
-	shred -u "$archdir/$USER.zip.tmp"
+	gpg --no-symkey-cache --batch --yes --passphrase-fd 0 --output "$gpg_arch" --symmetric "$tmp_arch"
+	shred -u "$tmp_arch"
+else
+	mv "$tmp_arch" "$arch_dir/$USER.zip"
 fi
 
-cd ~/.var/app/org.prismlauncher.PrismLauncher/data/PrismLauncher/instances/vanilla/minecraft &&
-zip -q9r - saves screenshots servers.dat > "$archdir/minecraft.zip"
+if [ -d "$prism_dir" ]; then
+	cd "$prism_dir"
+	zip -q9r - saves screenshots servers.dat > "$mc_arch"
+fi
 
-cd "$archdir"
+cd "$arch_dir"
 if [ -f md5sum.txt ]; then
 	mv md5sum.txt md5sum.old.txt
 fi
-md5sum ./*.gpg ./*.zip > md5sum.txt
+
+if [ -f "$gpg_arch" ]; then
+	md5sum ./*.gpg ./*.zip > md5sum.txt
+else
+	md5sum ./*.zip > md5sum.txt
+fi

@@ -56,10 +56,6 @@ Pin-Priority: 600
 Package: gdb-doc
 Pin: release o=Debian,a=stable,l=Debian,c=non-free
 Pin-Priority: 600
-
-Package: emacs-common-non-dfsg
-Pin: release o=Debian,a=stable,l=Debian,c=non-free
-Pin-Priority: 600
 EOF
 
 apt-add-repository contrib non-free
@@ -93,8 +89,6 @@ apt install \
 	build-essential \
 	cpp-doc \
 	curl \
-	emacs-common-non-dfsg \
-	emacs-gtk \
 	ffmpeg \
 	fzf \
 	gcc-doc \
@@ -106,6 +100,7 @@ apt install \
 	gpick \
 	imagemagick \
 	kruler \
+	libnotify-bin \
 	libsdl2-dev \
 	ltrace \
 	manpages-posix-dev \
@@ -113,7 +108,9 @@ apt install \
 	mit-scheme \
 	mpv \
 	nasm \
+	ncal \
 	python-pygame-doc \
+	python3-pip \
 	python3-pygame \
 	qalc \
 	rename \
@@ -121,6 +118,7 @@ apt install \
 	scrot \
 	shellcheck \
 	strace \
+	suckless-tools \
 	testdisk \
 	time \
 	tmux \
@@ -128,8 +126,7 @@ apt install \
 	universal-ctags \
 	xclip \
 	xorg-dev \
-	xxd \
-	zenity
+	xxd
 
 if [ -z "$1" ]; then
 	exit
@@ -139,6 +136,7 @@ username=$1
 cd /home/"$username"
 
 if ! [ -d .git ]; then
+	[ -f .config/user-dirs.dirs ] && mv .config/user-dirs.dirs .config/user-dirs.dirs.bak
 	rm -f .bashrc .profile
 	runuser "$username" -c 'git init -b main'
 	runuser "$username" -c 'git remote add origin https://github.com/danielsource/dotfiles.git'
@@ -148,5 +146,6 @@ fi
 cp .bashrc .profile /etc/skel
 cp .profile "$HOME/.profile"
 sed 's/32m/31m/' .bashrc > "$HOME/.bashrc"
+cp .bin/svim /usr/local/bin/svim
 
 runuser "$username" -c 'git ls-files'
