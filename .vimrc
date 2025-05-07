@@ -1,29 +1,30 @@
-filetype plugin on
+filetype plugin indent on
 
 set nocompatible
-set autoindent
+set tabstop=8 shiftwidth=8 noexpandtab
+set formatoptions+=lj cinoptions=c0,t0,:0,g0
 set number relativenumber
-set linebreak
 set backspace=indent,eol,start
+set display=truncate
 set splitright splitbelow
 set showcmd ruler
 set laststatus=1
+set hlsearch incsearch
 set completeopt=menu,longest,preview
 set path-=/usr/include, path+=src/**
 set wildmenu wildmode=list:longest,full
 set wildignore=*.o,*.obj,*.a,*.lib,*.so,*.dll,*.out,*.exe,*.class
+set history=1000
 set nrformats-=octal
-set autowrite
 set title titlestring=%(%m\ %)%t
-set directory=~/.vim/swap
-set undofile undodir=~/.vim/undo
+set autowrite
+set undofile
+set ttimeout ttimeoutlen=100
+set mouse=a
 
-let loaded_matchparen=1
 let g:netrw_banner=0
 let g:sh_no_error=1
-
-if !isdirectory($HOME.'/.vim/swap') | call mkdir($HOME.'/.vim/swap', 'p', 0700) | endif
-if !isdirectory($HOME.'/.vim/undo') | call mkdir($HOME.'/.vim/undo', 'p', 0700) | endif
+let g:mapleader=' '
 
 ino <C-s> <C-o>:update<CR>
 nn <C-s> :update<CR>
@@ -46,6 +47,13 @@ nn g4 :4wincmd w<CR>
 nn g5 :5wincmd w<CR>
 nn g6 :6wincmd w<CR>
 
+if !has('nvim')
+	if !isdirectory($HOME..'/.vim/swap') | call mkdir($HOME..'/.vim/swap', 'p', 0700) | endif
+	if !isdirectory($HOME..'/.vim/undo') | call mkdir($HOME..'/.vim/undo', 'p', 0700) | endif
+	set directory=~/.vim/swap// undodir=~/.vim/undo
+	nn <silent> <C-l> :nohlsearch<C-r>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-l>
+endif
+
 command DiffOrig vert new | set bt=nofile | file # (diff)
 	\ | r ++edit #
 	\ | 0d_ | diffthis | wincmd p | diffthis
@@ -55,8 +63,16 @@ augroup ftprefs
 	au BufNewFile,BufRead *.c,*.h setlocal path+=/usr/local/include,/usr/include
 augroup END
 
-if has('syntax')
-	syntax on
-	colorscheme habamax
-	hi Normal ctermbg=NONE
-endif
+augroup startup
+	au!
+	au BufReadPost *
+		\ if line("'\"") >= 1 && line("'\"") <= line('$') && &ft !~# 'commit'
+		\ |   exe 'normal! g`"zt'
+		\ | endif
+augroup END
+
+runtime ftplugin/man.vim
+
+syntax on
+colorscheme habamax
+hi Normal ctermbg=NONE
