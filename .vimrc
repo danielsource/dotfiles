@@ -1,14 +1,15 @@
 filetype plugin indent on
 
 set nocompatible
-set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab
+set tabstop=8 shiftwidth=8 noexpandtab
 set formatoptions+=lj cinoptions=c0,t0,:0,g0
 set number relativenumber
 set backspace=indent,eol,start
-set display=truncate
-set listchars=tab:\|\ ,lead:·,trail:·
 set splitright splitbelow
-set showcmd ruler
+set scrolloff=0
+set display=truncate
+set listchars=eol:$,tab:<->,space:.
+set showcmd ruler rulerformat=%10(%v%=\ %P%)
 set laststatus=1
 set hlsearch incsearch
 set completeopt=menu,longest,preview
@@ -20,7 +21,7 @@ set nrformats-=octal
 set title titlestring=%(%m\ %)%t
 set autowrite
 set undofile
-set exrc secure
+set noexrc secure
 set ttimeout ttimeoutlen=100
 set mouse=a
 
@@ -57,23 +58,33 @@ command DiffOrig vert new | set bt=nofile | file # (diff)
 
 augroup ftprefs
 	au!
-	au BufNewFile,BufRead *.c,*.h setlocal path+=~/opt/include,/usr/local/include,/usr/include,/usr/lib/gcc/x86_64-linux-gnu/*/include
+	au BufNewFile,BufRead *.c,*.h setlocal path+=~/opt/include,/usr/local/include,/usr/include,/usr/include/x86_64-linux-gnu,/usr/lib/gcc/x86_64-linux-gnu/*/include
 augroup END
 
 if !has('nvim')
 	runtime ftplugin/man.vim
 	set keywordprg=:Man
 
-	if !isdirectory($HOME..'/.vim/swap') | call mkdir($HOME..'/.vim/swap', 'p', 0700) | endif
-	if !isdirectory($HOME..'/.vim/undo') | call mkdir($HOME..'/.vim/undo', 'p', 0700) | endif
+	if !isdirectory($HOME..'/.vim/swap')
+		call mkdir($HOME..'/.vim/swap', 'p', 0700)
+	endif
+	if !isdirectory($HOME..'/.vim/undo')
+		call mkdir($HOME..'/.vim/undo', 'p', 0700)
+	endif
 	set directory=~/.vim/swap// undodir=~/.vim/undo viminfo+=n~/.vim/viminfo
 
 	nn <silent> <C-l> :nohlsearch<C-r>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-l>
 
 	syntax on
+	set bg=dark
 	augroup colors
 		au!
-		au ColorScheme habamax hi Normal ctermbg=NONE
+		au ColorScheme * hi Normal ctermbg=NONE
+		au ColorScheme * hi! link SpecialKey Comment
 	augroup END
 	colorscheme habamax
+
+	if filereadable($HOME..'/.vimrc.local')
+		source ~/.vimrc.local
+	endif
 endif

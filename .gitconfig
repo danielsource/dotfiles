@@ -1,8 +1,23 @@
 [init]
 	defaultBranch = main
+	templatedir = ~/.misc/emptydir
 [color "diff"]
 	meta = blue
 [alias]
-	nomsg = commit --allow-empty-message --no-edit
+	a = add
+	b = branch -avv
+	c = commit --allow-empty-message --no-edit
+	cm = commit -m
+	co = checkout
+	d = diff
+	dc = diff --cached
+	f = fetch
+	l = log --pretty=fuller --stat --show-signature
+	lg = log --all --oneline --graph
+	s = status -sb
+	w = show
+	r = remote -v
+	re = reset
+	sed = !git ls-tree -z -r --name-only HEAD | xargs -0 sed
 [include]
-	path = ~/docs/misc/gitconfig.txt
+	path = ~/.gitconfig.local

@@ -1,0 +1,43 @@
+#!/bin/sh
+
+set -e
+
+os=$(uname -s)
+arch=$(uname -m)
+
+if [ -z "$os" ] || [ -z "$arch" ]; then
+	echo Unknown
+	exit
+fi
+
+if [ "$arch" = x86_64 ]; then
+	arch=x64
+fi
+
+if [ "$os" != Linux ] || [ ! -f /etc/os-release ]; then
+	echo "$os $arch"
+	exit
+fi
+
+. /etc/os-release
+
+distro=$NAME
+version=${VERSION_ID:-$VERSION_CODENAME}
+
+if [ -z "$distro" ]; then
+	echo "$os $arch"
+	exit
+fi
+
+if [ -z "$version" ]; then
+	version_n_arch=$arch
+else
+	version_n_arch="$version $arch"
+fi
+
+case $distro in
+*Linux*)
+	echo "$distro $version_n_arch" ;;
+*)
+	echo "$distro $os $version_n_arch" ;;
+esac

@@ -1,0 +1,7 @@
+set statusbar-home-tilde true
+set guioptions v
+
+map j scroll half-down
+map k scroll half-up
+map [fullscreen] j scroll half-down
+map [fullscreen] k scroll half-up

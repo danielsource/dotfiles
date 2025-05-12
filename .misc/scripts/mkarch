@@ -1,0 +1,52 @@
+#!/bin/sh
+
+userdir() {
+	path=$(xdg-user-dir "$1")
+	if [ "$(dirname "$path")" = "$HOME" ]; then
+		basename "$path"
+	else
+		echo "$path"
+	fi
+}
+
+set -e
+
+date=$(date '+%Y%m%d')
+arch_dir=$(xdg-user-dir DOWNLOAD)/archives
+gpg_arch=$arch_dir/$USER-$date.gpg
+nongpg_arch=$arch_dir/$USER-$date.zip
+tmp_arch=$USER.zip.tmp
+
+for arg; do
+	case $arg in
+		-*) exit 1 ;;
+		*) arg=$(realpath "$arg") ;;
+	esac
+	set -- "$@" "$arg"
+	shift
+done
+
+cd ~
+mkdir -p "$arch_dir"
+
+if [ -f ~/.mkarch-pre ]; then
+	. ~/.mkarch-pre
+fi
+
+zip -q9r - -- "$(userdir DOCUMENTS)" "$@" > "$tmp_arch"
+if [ -f ~/.mkarch-pass ]; then
+	gpg --no-symkey-cache --decrypt ~/.mkarch-pass |
+		gpg --no-symkey-cache --batch --yes --passphrase-fd 0 \
+			--output "$gpg_arch" --symmetric "$tmp_arch"
+	shred -u "$tmp_arch"
+else
+	mv "$tmp_arch" "$nongpg_arch"
+fi
+
+cd "$arch_dir"
+
+if [ -f "$gpg_arch" ]; then
+	md5sum ./*.gpg ./*.zip > "md5sum-$date.txt"
+else
+	md5sum ./*.zip > "md5sum-$date.txt"
+fi

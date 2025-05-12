@@ -1,0 +1,9 @@
+#!/bin/sh
+
+set -e
+
+sink=$(wpctl status | awk '/^Audio$/{audio=1} /^Video$/{exit} (audio && /─ Sinks:$/){sinks=1;next} (sinks && $2==""){exit} sinks{sub(/^[^0-9]*/, ""); print}' | dmenu -i -l 4 -p "sink 🔊")
+
+sinkid="${sink%%.*}"
+
+wpctl set-default "$sinkid"

@@ -1,0 +1,44 @@
+Xft.antialias: 1
+Xft.hinting: 1
+Xft.rgba: rgb
+Xft.hintstyle: hintslight
+Xft.lcdfilter: lcddefault
+
+#include "colors.cpp"
+
+! special
+*.foreground: COLORFG
+*.background: COLOR00
+*.cursorColor: COLORCC
+
+! black
+*.color0: COLOR00
+*.color8: COLOR08
+
+! red
+*.color1: COLOR01
+*.color9: COLOR09
+
+! green
+*.color2: COLOR02
+*.color10: COLOR10
+
+! yellow
+*.color3: COLOR03
+*.color11: COLOR11
+
+! blue
+*.color4: COLOR04
+*.color12: COLOR12
+
+! magenta
+*.color5: COLOR05
+*.color13: COLOR13
+
+! cyan
+*.color6: COLOR06
+*.color14: COLOR14
+
+! white
+*.color7: COLOR07
+*.color15: COLOR15

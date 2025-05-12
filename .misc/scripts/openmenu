@@ -4,10 +4,22 @@ set -e
 
 findcmd=${FZF_DEFAULT_COMMAND:-"find -L . -mindepth 1 \\( -path '*/.*' -o -path ./opt/misc -o -path '*/*.git' -o -fstype 'sysfs' -o -fstype 'devfs' -o -fstype 'devtmpfs' -o -fstype 'proc' \\) -prune -o -type f -print -o -type d -print -o -type l -print 2>/dev/null | cut -b3-"}
 
-file=$(eval "$findcmd" | dmenu -i -l 24 -p "open" "$@")
+file=$(eval "$findcmd" | cat - "$(xdg-user-dir DOCUMENTS)/misc/urls.txt" | dmenu -i -l 24 -p "open" "$@")
 
 if [ ! -e "$file" ]; then
-	exit 1
+	case $file in
+	*://*)
+		file=${file%[[:blank:]]#*}
+		;;
+	*@)
+		realpath "${file%@}" | xclip -rmlastnl -selection clipboard
+		exit
+		;;
+	*)
+		echo '?' >&2
+		exit 1
+		;;
+	esac
 fi
 
 exec open "$file"
