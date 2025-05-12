@@ -1,0 +1,8 @@
+#!/bin/sh
+
+argc=0
+echo "argv[$argc] = \"$0\""
+for arg; do
+	argc=$((argc + 1))
+	echo "argv[$argc] = \"$arg\""
+done

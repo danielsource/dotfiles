@@ -1,3 +1,0 @@
-#!/bin/sh
-
-exec notify-send -u low "$(date '+%Y-%m-%d %H:%M %Z')"

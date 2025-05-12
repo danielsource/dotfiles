@@ -1,4 +1,5 @@
 #!/bin/sh
 
 dpy off &
+media stop &
 exec slock

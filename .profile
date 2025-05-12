@@ -1,8 +1,24 @@
-#umask 022
-
 export FZF_DEFAULT_OPTS=--no-color
-export EDITOR=vim
-export SUDO_EDITOR=svim
+
+if command -v vim >/dev/null; then
+	export EDITOR=vim
+fi
+
+if command -v svim >/dev/null; then
+	export SUDO_EDITOR=svim
+fi
+
+if [ -d "$HOME/.misc/scripts" ]; then
+	PATH="$HOME/.misc/scripts:$PATH"
+fi
+
+if [ -d "$HOME/.local/bin" ]; then
+	PATH="$HOME/.local/bin:$PATH"
+fi
+
+if [ -f ~/.profile.local ]; then
+	. ~/.profile.local
+fi
 
 if [ -n "$BASH_VERSION" ]; then
 	if [ -f "$HOME/.bashrc" ]; then
@@ -10,18 +26,12 @@ if [ -n "$BASH_VERSION" ]; then
 	fi
 fi
 
-if [ -d "$HOME/.bin" ]; then
-	PATH="$HOME/.bin:$PATH"
-fi
+if [ "$(id -u)" -ne 0 ]; then
+	if [ -d /var/lib/flatpak/exports/bin ]; then
+		PATH="$PATH:/var/lib/flatpak/exports/bin"
+	fi
 
-if [ -d "$HOME/.local/bin" ]; then
-	PATH="$HOME/.local/bin:$PATH"
-fi
-
-if [ -d /var/lib/flatpak/exports/bin ]; then
-	PATH="$PATH:/var/lib/flatpak/exports/bin"
-fi
-
-if [ -z "$DISPLAY" -a "$(tty)" = '/dev/tty5' ]; then
-	exec xinit -- :5 vt05 2> ~/.cache/xinit-err.txt
+	if [ -f ~/.xinitrc ] && [ -z "$DISPLAY" ] && [ "$(tty)" = '/dev/tty5' ]; then
+		exec xinit -- :5 vt05 >~/.cache/xinit.log 2>&1
+	fi
 fi

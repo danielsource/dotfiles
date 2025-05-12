@@ -1,0 +1,5 @@
+#!/bin/sh
+
+for arg; do
+	setsid xdg-open "$arg" 2>/dev/null &
+done

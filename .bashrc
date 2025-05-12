@@ -10,38 +10,11 @@ shopt -s extglob
 shopt -s globskipdots
 stty -ixon
 
-case "$TERM" in
-linux|xterm*|tmux*)
-	PS1='\[\033[00m\]($?) \[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-	PS1="\[\e]0;${debian_chroot:+($debian_chroot) }\u@\h: \W\a\]$PS1"
+if [ "$TERM" = linux ]; then
+	printf '\e]P0000000\e]P1cd3131\e]P20dbc79\e]P3e5e510\e]P42472c8\e]P5bc3fbc\e]P611a8cd\e]P8666666\e]P9f14c4c\e]PA23d18b\e]PBf5f543\e]PC3b8eea\e]PDd670d6\e]PE29b8db'
+fi
 
-	if [ "$TERM" = "linux" ]; then
-		/bin/echo -e "
-		\e]P0000000
-		\e]P1cd3131
-		\e]P20dbc79
-		\e]P3e5e510
-		\e]P42472c8
-		\e]P5bc3fbc
-		\e]P611a8cd
-		\e]P7e5e5e5
-		\e]P8666666
-		\e]P9f14c4c
-		\e]PA23d18b
-		\e]PBf5f543
-		\e]PC3b8eea
-		\e]PDd670d6
-		\e]PE29b8db
-		\e]PFe5e5e5"
-		clear
-	fi
-	;;
-*)
-	PS1='($?) \u@\h:\w\$ '
-	;;
-esac
-
-if [ "$(id -u)" -ne 0 ] && [ "$TERM" != dumb ] && ! shopt -oq posix; then
+if [ "$(id -u)" -ne 0 ] && [ "$TERM" != dumb ]; then
 	if [ -f "${PREFIX:-/usr}"/share/bash-completion/bash_completion ]; then
 		. "${PREFIX:-/usr}"/share/bash-completion/bash_completion
 	elif [ -f /etc/bash_completion ]; then
@@ -50,7 +23,25 @@ if [ "$(id -u)" -ne 0 ] && [ "$TERM" != dumb ] && ! shopt -oq posix; then
 	if [ -f "${PREFIX:-/usr}"/share/doc/fzf/examples/key-bindings.bash ]; then
 		. "${PREFIX:-/usr}"/share/doc/fzf/examples/key-bindings.bash
 	fi
-	bind -x '"\C-g":tmux_here'
+
+	bind -x '"\eOP":tmuxhere' # F1
+	if command -v st >/dev/null; then
+		bind -x '"\eOQ":setsid st' # F2
+	fi
+
+	if command -v __git_ps1 >/dev/null; then
+		GIT_PS1_SHOWDIRTYSTATE=1
+		GIT_PS1_SHOWSTASHSTATE=1
+		GIT_PS1_SHOWUNTRACKEDFILES=1
+		GIT_PS1_SHOWUPSTREAM=auto
+		GIT_PS1_HIDE_IF_PWD_IGNORED=1
+		PS1='\[\e]0;($?) In \W $(__git_ps1 "on %s")\a\]% '
+	else
+		PS1='\[\e]0;($?) \W\a\]% '
+	fi
+else
+	printf "\e]0;$0\a"
+	PS1='\$ '
 fi
 
 asciigraph() {
@@ -93,23 +84,33 @@ datediff() {
 		return 1
 	fi
 	d2=$(date -d "$1" +%s) || return $?
-	echo $(( (d2 - d1) / 86400 )) days
+	echo "$(((d2 - d1) / 86400)) day(s)"
 }
 
 lastmod() {
 	find "$@" -type f -exec stat -c '%Y :%y %n' {} + | sort -nr | cut -d: -f2-
 }
 
-rot13() {
-	tr "$(echo -n {A..Z} {a..z} | tr -d ' ')" "$(echo -n {N..Z} {A..M} {n..z} {a..m} | tr -d ' ')"
+sysc() {
+	man "${1:-2}" \
+		"$(echo '#include <sys/syscall.h>' |
+		cpp -dM |
+		awk '/#define __NR_/ {print $3 "\t" substr($2, 6)}' |
+		sort -n |
+		fzf |
+		cut -f2)"
 }
 
-tmux_here() {
+tmuxhere() {
 	tmux new-session -As "$(printf '%.*s' 7 "$(basename "$PWD" | tr -cd '[:alnum:]')")"
 }
 
-alias ls='LC_COLLATE=C ls --color=auto'
+alias ls='LC_COLLATE=C ls --color=auto --group-directories-first'
 alias l='ls -lahG'
 alias o=open
 
 export GPG_TTY=$(tty)
+
+if [ -f ~/.bashrc.local ]; then
+	. ~/.bashrc.local
+fi
