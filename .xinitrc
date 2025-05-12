@@ -4,6 +4,10 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 
 xrdb -merge ~/.Xresources
 
+if [ -f ~/.splash ]; then
+	xsetroot -name "$(shuf -n 1 ~/.splash)"
+fi
+
 remaps
 
 feh --no-fehbg --bg-fill ~/.misc/bg.webp

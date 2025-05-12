@@ -2,6 +2,7 @@
 Name=Theme
 ColorCursorForeground=#000000
 ColorCursor=#d992d6
+TabActivityColor=#99c1f1
 ColorForeground=#cccccc
 ColorBackground=#1c1c1c
 ColorPalette=#1c1c1c1c1c1c;#cdcd31313131;#0d0dbcbc7979;#e5e5e5e51010;#24247272c8c8;#bcbc3f3fbcbc;#1111a8a8cdcd;#e5e5e5e5e5e5;#666666666666;#f1f14c4c4c4c;#2323d1d18b8b;#f5f5f5f54343;#3b3b8e8eeaea;#d6d67070d6d6;#2929b8b8dbdb;#e5e5e5e5e5e5

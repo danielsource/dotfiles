@@ -1,5 +1,6 @@
 [init]
 	defaultBranch = main
+	templatedir = ~/.misc/emptydir
 [color "diff"]
 	meta = blue
 [alias]

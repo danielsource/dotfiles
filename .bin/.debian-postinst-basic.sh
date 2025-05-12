@@ -7,11 +7,19 @@ if [ "$(id -u)" -ne 0 ]; then
 	exit 1
 fi
 
-echo kernel.dmesg_restrict=0 > /etc/sysctl.d/local.conf
+if [ ! -e /etc/sysctl.d/local.conf ]; then
+	echo 'kernel.dmesg_restrict=0' > /etc/sysctl.d/local.conf
+fi
+
+if [ -e /etc/motd ]; then
+	mv /etc/motd /etc/motd.bak
+fi
 
 ### Debian only ###
-if . /etc/os-release && [ "$ID" = debian ]
+if . /etc/os-release && [ "$ID" = debian ] && [ -n "$VERSION_ID" ]
 then
+apt install software-properties-common
+
 cat <<'EOF' > /etc/apt/preferences.d/block_contrib
 Package: *
 Pin: release o=Debian,a=stable,l=Debian,c=contrib
@@ -65,22 +73,6 @@ fi
 
 apt update && apt upgrade
 
-apt install vim-gtk3
-
-apt autopurge \
-	evolution \
-	gnome-contacts \
-	gnome-games \
-	gnome-maps \
-	gnome-music \
-	gnome-text-editor \
-	gnome-weather \
-	synaptic \
-	totem \
-	vim-tiny \
-	yelp \
-	zutty
-
 apt install \
 	apt-file \
 	arch-install-scripts \
@@ -91,6 +83,8 @@ apt install \
 	curl \
 	feh \
 	ffmpeg \
+	fonts-inter \
+	fonts-mononoki \
 	fzf \
 	gcc-doc \
 	gdb \
@@ -98,18 +92,24 @@ apt install \
 	gimp \
 	git \
 	gparted \
+	gpg \
 	gpick \
 	imagemagick \
 	kruler \
 	libnotify-bin \
 	libsdl2-dev \
 	ltrace \
+	lxappearance \
+	lynx \
+	man-db \
+	manpages \
 	manpages-posix \
 	manpages-posix-dev \
 	mat2 \
 	mpv \
 	nasm \
 	ncal \
+	pavucontrol \
 	playerctl \
 	python-pygame-doc \
 	python3-pip \
@@ -126,8 +126,15 @@ apt install \
 	tree \
 	universal-ctags \
 	unzip \
+	vim-gtk3 \
+	x11-xserver-utils \
 	xclip \
 	xdg-utils \
+	xfce4-notifyd \
+	xfce4-terminal \
+	xinit \
+	xinput \
+	xorg-dev \
 	xxd \
 	zip
 
@@ -138,12 +145,12 @@ username=$1
 
 cd /home/"$username"
 
-if ! [ -d .git ]; then
-	[ -f .config/user-dirs.dirs ] && mv .config/user-dirs.dirs .config/user-dirs.dirs.bak
+if [ ! -d .git ]; then
+	[ -e .config/user-dirs.dirs ] && mv .config/user-dirs.dirs .config/user-dirs.dirs.bak
 	rm -f .bashrc .profile
-	runuser "$username" -c 'git init -b main'
-	runuser "$username" -c 'git remote add origin https://github.com/danielsource/dotfiles.git'
-	runuser "$username" -c 'git pull --set-upstream origin main'
+	su "$username" -c 'git init -b main'
+	su "$username" -c 'git remote add origin https://github.com/danielsource/dotfiles.git'
+	su "$username" -c 'git pull --set-upstream origin main'
 fi
 
 cp .bashrc .profile /etc/skel
@@ -151,4 +158,4 @@ cp .profile "$HOME/.profile"
 sed 's/32m/31m/' .bashrc > "$HOME/.bashrc"
 cp .bin/svim /usr/local/bin/svim
 
-runuser "$username" -c 'git ls-files'
+su "$username" -c 'git ls-files'

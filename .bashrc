@@ -16,24 +16,7 @@ linux|xterm*|tmux*)
 	PS1="\[\e]0;${debian_chroot:+($debian_chroot) }\u@\h: \W\a\]$PS1"
 
 	if [ "$TERM" = "linux" ]; then
-		/bin/echo -e "
-		\e]P0000000
-		\e]P1cd3131
-		\e]P20dbc79
-		\e]P3e5e510
-		\e]P42472c8
-		\e]P5bc3fbc
-		\e]P611a8cd
-		\e]P7e5e5e5
-		\e]P8666666
-		\e]P9f14c4c
-		\e]PA23d18b
-		\e]PBf5f543
-		\e]PC3b8eea
-		\e]PDd670d6
-		\e]PE29b8db
-		\e]PFe5e5e5"
-		clear
+		printf '\e]P0000000\e]P1cd3131\e]P20dbc79\e]P3e5e510\e]P42472c8\e]P5bc3fbc\e]P611a8cd\e]P7e5e5e5\e]P8666666\e]P9f14c4c\e]PA23d18b\e]PBf5f543\e]PC3b8eea\e]PDd670d6\e]PE29b8db\e]PFe5e5e5'
 	fi
 	;;
 *)
@@ -108,6 +91,7 @@ tmux_here() {
 	tmux new-session -As "$(printf '%.*s' 7 "$(basename "$PWD" | tr -cd '[:alnum:]')")"
 }
 
+alias vi=vim
 alias ls='LC_COLLATE=C ls --color=auto'
 alias l='ls -lahG'
 alias o=open

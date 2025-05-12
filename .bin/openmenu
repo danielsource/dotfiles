@@ -7,7 +7,15 @@ findcmd=${FZF_DEFAULT_COMMAND:-"find -L . -mindepth 1 \\( -path '*/.*' -o -path 
 file=$(eval "$findcmd" | dmenu -i -l 24 -p "open" "$@")
 
 if [ ! -e "$file" ]; then
-	exit 1
+	case $file in
+	*@)
+		realpath "${file%@}" | xclip -rmlastnl -selection clipboard
+		exit
+		;;
+	*)
+		exit 1
+		;;
+	esac
 fi
 
 exec open "$file"
