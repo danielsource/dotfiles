@@ -1,0 +1,43 @@
+#!/bin/sh
+
+set -e
+
+if [ $# -eq 2 ]; then
+	repo=$1
+	origin_url=$2
+elif [ $# -eq 1 ]; then
+	repo=$1
+	unset origin_url
+else
+	echo '?' >&2
+	exit 1
+fi
+
+if [ -e "$repo" ]; then
+	echo '?' >&2
+	exit 2
+fi
+
+repo_name=$(basename "$repo")
+repo_docs=$(xdg-user-dir DOCUMENTS)/repos/$repo_name.git
+
+if [ ! -e "$repo_docs" ]; then
+	git init --bare "$repo_docs"
+
+	if [ -n "$origin_url" ]; then
+		git -C "$repo_docs" remote add origin "$origin_url"
+	fi
+fi
+
+git init "$repo"
+cd "$repo"
+
+git remote add local "$repo_docs"
+
+if [ -n "$origin_url" ]; then
+	git remote add origin "$origin_url"
+fi
+
+if [ -n "$(git -C "$repo_docs" rev-list -n 1 --all)" ]; then
+	git pull --set-upstream local "$(git -C "$repo_docs" symbolic-ref --short HEAD)"
+fi

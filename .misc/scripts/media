@@ -1,0 +1,46 @@
+#!/bin/sh
+
+wireplumber_volume_up() {
+	wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05+
+}
+
+wireplumber_volume_down() {
+	wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05-
+}
+
+wireplumber_toggle_mute() {
+	wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+}
+
+playerctl_next() {
+	playerctl next
+}
+
+playerctl_previous() {
+	playerctl previous
+}
+
+playerctl_toggle_pause() {
+	playerctl play-pause
+}
+
+playerctl_stop() {
+	i=0
+	while [ $i -le 5 ]; do
+		playerctl -a stop 2>/dev/null || return
+		i=$((i + 1))
+	done
+}
+
+case $1 in
+vol+) wireplumber_volume_up ;;
+vol-) wireplumber_volume_down ;;
+mute) wireplumber_toggle_mute ;;
+next) playerctl_next && notify-send -t 300 -u low 'Next media' ;;
+prev) playerctl_previous && notify-send -t 300 -u low 'Previous media' ;;
+pause) playerctl_toggle_pause && notify-send -t 300 -u low 'Play/pause media' ;;
+stop) playerctl_stop ;;
+*)
+	echo '?' >&2
+	exit 1 ;;
+esac

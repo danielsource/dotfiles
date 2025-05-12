@@ -25,8 +25,8 @@
        (file-exists-p exwm-file)
        (load exwm-file nil t)))
 
-;; Simulation of the Vim equivalent "set ts=2 sw=2 et"
-(defvar d/tabstop 2)
+;; Simulation of the Vim equivalent "set ts=4 sw=4 et"
+(defvar d/tabstop 4)
 (defvar d/expandtab t)
 (setq-default c-basic-offset d/tabstop
               sh-basic-offset d/tabstop

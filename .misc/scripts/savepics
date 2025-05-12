@@ -1,0 +1,40 @@
+#!/bin/sh
+
+set -e
+
+if [ $# -ne 1 ]; then
+	echo '?' >&2
+	exit 1
+fi
+
+in_dir=$1
+out_dir="$(xdg-user-dir DOCUMENTS)"/camera
+
+cd "$in_dir"
+mkdir -p "$out_dir"
+
+for f in IMG_* VID_*; do
+	[ -e "$f" ] || break
+
+	date=$(echo "$f" | cut -c5-19)
+	ext=${f##*.}
+	incr=1
+	out=${out_dir}/${date}.${ext}
+
+	case $date in
+	# YYYY              mm        dd         HH        MM        SS
+	[0-9][0-9][0-9][0-9][0-1][0-9][0-3][0-9]_[0-2][0-9][0-5][0-9][0-6][0-9]) ;;
+	*) echo "ignored: $f" >&2 ; continue ;;
+	esac
+
+	while [ -e "$out" ]; do
+		incr=$((incr + 1))
+		out=${out_dir}/${date}_${incr}.${ext}
+	done
+
+	case $ext in
+	jpg) mogrify -write "$out" -quality 30% "$f" ;;
+	mp4) ffmpeg -i "$f" -vcodec libx265 -crf 28 "$out" </dev/null >/dev/null 2>&1 & ;;
+	*) echo "ignored: $f" >&2 ; continue ;;
+	esac
+done

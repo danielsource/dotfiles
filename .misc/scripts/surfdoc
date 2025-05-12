@@ -3,15 +3,17 @@
 set -e
 
 findcmd=${SURFDOC_COMMAND:-"find opt/doc /usr/local/go/doc /usr/local/share/doc /usr/share/doc -type f -o -type l 2>/dev/null"}
-cache=~/.cache/surfdoc.txt
+cache=${XDG_CACHE_HOME:-$HOME/.cache}/surfdoc
 
 if [ -f "$cache" ]; then
 	file=$(dmenu -i -l 24 -p "doc" "$@" < "$cache")
 else
+	mkdir -p "$(dirname "$cache")"
 	file=$(eval "$findcmd" | tee "$cache" | dmenu -i -l 24 -p "doc" "$@")
 fi
 
 if [ ! -e "$file" ]; then
+	echo '?' >&2
 	exit 1
 fi
 
