@@ -1,7 +1,7 @@
 filetype plugin indent on
 
 set nocompatible
-set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab
+set tabstop=8 shiftwidth=8 noexpandtab
 set formatoptions+=lj cinoptions=c0,t0,:0,g0
 set number relativenumber
 set backspace=indent,eol,start
@@ -20,7 +20,7 @@ set nrformats-=octal
 set title titlestring=%(%m\ %)%t
 set autowrite
 set undofile
-set exrc secure
+set noexrc secure
 set ttimeout ttimeoutlen=100
 set mouse=a
 

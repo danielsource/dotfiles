@@ -1,0 +1,7 @@
+#!/bin/sh
+
+while true; do
+	load5m=$(awk -v nproc=$(nproc) '{printf "%.2f%\n", $2 * 100 / nproc}' /proc/loadavg)
+	xsetroot -name "$load5m"
+	sleep 300
+done

@@ -16,7 +16,7 @@ linux|xterm*|tmux*)
 	PS1="\[\e]0;${debian_chroot:+($debian_chroot) }\u@\h: \W\a\]$PS1"
 
 	if [ "$TERM" = "linux" ]; then
-		printf '\e]P0000000\e]P1cd3131\e]P20dbc79\e]P3e5e510\e]P42472c8\e]P5bc3fbc\e]P611a8cd\e]P7e5e5e5\e]P8666666\e]P9f14c4c\e]PA23d18b\e]PBf5f543\e]PC3b8eea\e]PDd670d6\e]PE29b8db\e]PFe5e5e5'
+		printf '\e]P0000000\e]P1cd3131\e]P20dbc79\e]P3e5e510\e]P42472c8\e]P5bc3fbc\e]P611a8cd\e]P8666666\e]P9f14c4c\e]PA23d18b\e]PBf5f543\e]PC3b8eea\e]PDd670d6\e]PE29b8db'
 	fi
 	;;
 *)
@@ -87,12 +87,22 @@ rot13() {
 	tr "$(echo -n {A..Z} {a..z} | tr -d ' ')" "$(echo -n {N..Z} {A..M} {n..z} {a..m} | tr -d ' ')"
 }
 
+syscalls() {
+	man "${1:-2}" \
+		"$(echo '#include <sys/syscall.h>' |
+		cpp -dM |
+		awk '/#define __NR_/ {print $3 "\t" substr($2, 6)} ' |
+		sort -n |
+		fzf |
+		cut -f2)"
+}
+
 tmux_here() {
 	tmux new-session -As "$(printf '%.*s' 7 "$(basename "$PWD" | tr -cd '[:alnum:]')")"
 }
 
 alias vi=vim
-alias ls='LC_COLLATE=C ls --color=auto'
+alias ls='LC_COLLATE=C ls --color=auto --group-directories-first'
 alias l='ls -lahG'
 alias o=open
 
