@@ -92,7 +92,7 @@ tmux_here() {
 }
 
 alias vi=vim
-alias ls='LC_COLLATE=C ls --color=auto'
+alias ls='LC_COLLATE=C ls --color=auto --group-directories-first'
 alias l='ls -lahG'
 alias o=open
 

@@ -20,7 +20,7 @@ set nrformats-=octal
 set title titlestring=%(%m\ %)%t
 set autowrite
 set undofile
-set exrc secure
+set noexrc secure
 set ttimeout ttimeoutlen=100
 set mouse=a
 
