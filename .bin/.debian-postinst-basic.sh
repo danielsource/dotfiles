@@ -29,7 +29,7 @@ echo "You are in $NAME $VERSION_ID"
 echo
 
 echo "Install software-properties-common to configure contrib and non-free exceptions"
-apt install software-properties-common
+apt -y install software-properties-common
 echo "[END] Install software-properties-common"
 echo
 
@@ -84,7 +84,7 @@ EOF
 echo
 
 echo "Add contrib and non-free"
-apt-add-repository contrib non-free
+apt-add-repository -y contrib non-free
 echo "[END] Add contrib and non-free"
 echo
 
@@ -92,12 +92,12 @@ fi
 ### END Debian only ###
 
 echo "apt update && apt upgrade"
-apt update && apt upgrade
+apt update && apt -y upgrade
 echo "[END] apt update && apt upgrade"
 echo
 
 echo "Install my tools and goodies"
-apt install \
+apt -y install \
 	apt-file \
 	arch-install-scripts \
 	ascii \
@@ -123,6 +123,7 @@ apt install \
 	kruler \
 	libnotify-bin \
 	libsdl2-dev \
+	libx11-doc \
 	ltrace \
 	lxappearance \
 	lynx \
@@ -164,6 +165,14 @@ apt install \
 	zip
 echo "[END] Install my tools and goodies"
 echo
+
+case $(uname -n) in vm-*)
+	echo "Install VM guest tools"
+	apt -y install spice-webdavd spice-vdagent davfs2
+	echo "[END] Install VM guest tools"
+	echo
+	;;
+esac
 
 if [ -z "$1" ]; then
 	echo "Skipping user setup. Bye!"

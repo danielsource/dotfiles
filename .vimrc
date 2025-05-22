@@ -57,7 +57,7 @@ command DiffOrig vert new | set bt=nofile | file # (diff)
 
 augroup ftprefs
 	au!
-	au BufNewFile,BufRead *.c,*.h setlocal path+=~/opt/include,/usr/local/include,/usr/include,/usr/lib/gcc/x86_64-linux-gnu/*/include
+	au BufNewFile,BufRead *.c,*.h setlocal path+=~/opt/include,/usr/local/include,/usr/include,/usr/include/x86_64-linux-gnu,/usr/lib/gcc/x86_64-linux-gnu/*/include
 augroup END
 
 if !has('nvim')

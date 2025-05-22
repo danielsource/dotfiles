@@ -23,5 +23,5 @@ if [ -d /var/lib/flatpak/exports/bin ]; then
 fi
 
 if [ -z "$DISPLAY" ] && [ "$(tty)" = '/dev/tty5' ]; then
-	exec xinit -- :5 vt05 2> ~/.cache/xinit-err.txt
+	exec xinit -- :5 vt05 >~/.cache/xinit.log 2>&1
 fi

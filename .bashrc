@@ -33,7 +33,7 @@ if [ "$(id -u)" -ne 0 ] && [ "$TERM" != dumb ] && ! shopt -oq posix; then
 	if [ -f "${PREFIX:-/usr}"/share/doc/fzf/examples/key-bindings.bash ]; then
 		. "${PREFIX:-/usr}"/share/doc/fzf/examples/key-bindings.bash
 	fi
-	bind -x '"\C-g":tmux_here'
+	bind -x '"\C-g":tmuxhere'
 fi
 
 asciigraph() {
@@ -87,7 +87,7 @@ rot13() {
 	tr "$(echo -n {A..Z} {a..z} | tr -d ' ')" "$(echo -n {N..Z} {A..M} {n..z} {a..m} | tr -d ' ')"
 }
 
-syscalls() {
+sysc() {
 	man "${1:-2}" \
 		"$(echo '#include <sys/syscall.h>' |
 		cpp -dM |
@@ -97,7 +97,7 @@ syscalls() {
 		cut -f2)"
 }
 
-tmux_here() {
+tmuxhere() {
 	tmux new-session -As "$(printf '%.*s' 7 "$(basename "$PWD" | tr -cd '[:alnum:]')")"
 }
 
