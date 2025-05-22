@@ -123,6 +123,7 @@ apt install \
 	kruler \
 	libnotify-bin \
 	libsdl2-dev \
+	libx11-doc \
 	ltrace \
 	lxappearance \
 	lynx \
