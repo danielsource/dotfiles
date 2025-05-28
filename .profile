@@ -1,5 +1,3 @@
-#umask 022
-
 export FZF_DEFAULT_OPTS=--no-color
 export EDITOR=vim
 export SUDO_EDITOR=svim
@@ -18,10 +16,12 @@ if [ -d "$HOME/.local/bin" ]; then
 	PATH="$HOME/.local/bin:$PATH"
 fi
 
-if [ -d /var/lib/flatpak/exports/bin ]; then
-	PATH="$PATH:/var/lib/flatpak/exports/bin"
-fi
+if [ "$(id -u)" -ne 0 ]; then
+	if [ -d /var/lib/flatpak/exports/bin ]; then
+		PATH="$PATH:/var/lib/flatpak/exports/bin"
+	fi
 
-if [ -z "$DISPLAY" ] && [ "$(tty)" = '/dev/tty5' ]; then
-	exec xinit -- :5 vt05 >~/.cache/xinit.log 2>&1
+	if [ -z "$DISPLAY" ] && [ "$(tty)" = '/dev/tty5' ]; then
+		exec xinit -- :5 vt05 >~/.cache/xinit.log 2>&1
+	fi
 fi

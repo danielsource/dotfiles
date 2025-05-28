@@ -4,6 +4,10 @@
 [color "diff"]
 	meta = blue
 [alias]
+	s = status -sb
+	d = diff
+	dc = diff --cached
+	b = branch -avv
 	nomsg = commit --allow-empty-message --no-edit
 [include]
 	path = ~/docs/misc/gitconfig.txt

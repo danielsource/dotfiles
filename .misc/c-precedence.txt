@@ -1,4 +1,4 @@
-C operator precedence (RL is right-to-left associativity instead of LR)
+C operator precedence
 +------------+---------------------------------------+
 | precedence | operator                              |
 +------------+---------------------------------------+
@@ -18,3 +18,5 @@ C operator precedence (RL is right-to-left associativity instead of LR)
 | 14 (RL)    | = += -= *= /= %= <<= >>= &= ^= |=     |
 | 15         | ,                                     |
 +----------------------------------------------------+
+RL means right-to-left associativity, the rest have
+left-to-right associativity.

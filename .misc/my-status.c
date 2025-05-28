@@ -1,13 +1,13 @@
 /* Status for dwm on Linux - compile with -lX11 */
 
 #define DELAY_SEC    5
-#define TIME_FORMAT  "%a %d/%b %H:%M"
+#define TIME_FORMAT  "%a %d %b %H:%M"
 #define TIME_LOCALE  "pt_BR.UTF-8"
 #define LOAD_N       2  /* 1 to 1min, 2 to 5min, 3 to 15min load average */
 #define BATTERY      "BAT1"
-#define STATUS       get_load, get_battery, get_date
+#define STATUS       get_load, get_battery, get_uptime, get_date
 #define SEPARATOR    " | "
-#define BUF_SIZE     128
+#define BUF_SIZE     64
 
 #define _DEFAULT_SOURCE
 
@@ -43,9 +43,9 @@ get_load(void)
 	double loadavg[LOAD_N];
 
 	if (getloadavg(loadavg, LOAD_N) != LOAD_N)
-		return "l:<error>";
+		return "l <error>";
 
-	snprintf(buf, sizeof(buf), "l:%3.2f", loadavg[LOAD_N-1] / cpu_n);
+	snprintf(buf, sizeof(buf), "l %3.2f", loadavg[LOAD_N-1] / cpu_n);
 	return buf;
 }
 
@@ -60,19 +60,42 @@ get_battery(void)
 
 	ret = pread(bat_status_fd, buf, 3, 0);
 	if (ret == -1)
-		return "bat:<error>";
+		return "bat <error>";
 	off = ret;
 
 	buf[0] += 32;
-	buf[off++] = ':';
+	buf[off++] = ' ';
 
 	ret = pread(bat_capacity_fd, buf+off, 3, 0);
 	if (ret == -1)
-		return "bat:<error>";
+		return "bat <error>";
 	for (ret += off; off < ret && buf[off] > ' '; ++off);
 
 	buf[off++] = '%';
 	buf[off++] = '\0';
+
+	return buf;
+}
+
+static char *
+get_uptime(void)
+{
+	static char buf[BUF_SIZE];
+	static int count = 0;
+	struct sysinfo inf;
+	int hour, min;
+
+	if (count == 0) {
+		if (sysinfo(&inf) == -1)
+			return "up <error>";
+		hour = inf.uptime / 3600;
+		min = inf.uptime % 3600 / 60;
+		snprintf(buf, sizeof(buf), "up %02d:%02d", hour, min);
+	}
+
+#if 60 % DELAY_SEC == 0
+	count = (count + DELAY_SEC) % 60;
+#endif
 
 	return buf;
 }
@@ -90,7 +113,7 @@ get_date(void)
 
 static char *(*status_funcs[])(void) = { STATUS };
 
-static char status[BUF_SIZE * LENGTH(status_funcs)];
+static char status[(BUF_SIZE + sizeof(SEPARATOR)-1) * LENGTH(status_funcs)];
 
 int
 main(void)

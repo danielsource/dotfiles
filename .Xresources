@@ -4,39 +4,41 @@ Xft.rgba: rgb
 Xft.hintstyle: hintslight
 Xft.lcdfilter: lcddefault
 
+#include ".misc/colors.cpp"
+
 ! special
-*.foreground: #cccccc
-*.background: #1c1c1c
-*.cursorColor: #d992d6
+*.foreground: COLORFG
+*.background: COLOR00
+*.cursorColor: COLORCC
 
 ! black
-*.color0: #1c1c1c
-*.color8: #666666
+*.color0: COLOR00
+*.color8: COLOR08
 
 ! red
-*.color1: #cd3131
-*.color9: #f14c4c
+*.color1: COLOR01
+*.color9: COLOR09
 
 ! green
-*.color2: #0dbc79
-*.color10: #23d18b
+*.color2: COLOR02
+*.color10: COLOR10
 
 ! yellow
-*.color3: #e5e510
-*.color11: #f5f543
+*.color3: COLOR03
+*.color11: COLOR11
 
 ! blue
-*.color4: #2472c8
-*.color12: #3b8eea
+*.color4: COLOR04
+*.color12: COLOR12
 
 ! magenta
-*.color5: #bc3fbc
-*.color13: #d670d6
+*.color5: COLOR05
+*.color13: COLOR13
 
 ! cyan
-*.color6: #11a8cd
-*.color14: #29b8db
+*.color6: COLOR06
+*.color14: COLOR14
 
 ! white
-*.color7: #e5e5e5
-*.color15: #e5e5e5
+*.color7: COLOR07
+*.color15: COLOR15

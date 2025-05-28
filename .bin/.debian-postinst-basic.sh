@@ -121,6 +121,7 @@ apt -y install \
 	gpick \
 	imagemagick \
 	kruler \
+	libimage-exiftool-perl \
 	libnotify-bin \
 	libsdl2-dev \
 	libx11-doc \
@@ -137,6 +138,7 @@ apt -y install \
 	ncal \
 	pavucontrol \
 	playerctl \
+	poppler-utils \
 	python-pygame-doc \
 	python3-pip \
 	python3-pygame \
@@ -156,6 +158,7 @@ apt -y install \
 	x11-xserver-utils \
 	xclip \
 	xdg-utils \
+	xdotool \
 	xfce4-notifyd \
 	xfce4-terminal \
 	xinit \
@@ -196,8 +199,7 @@ fi
 
 echo "Copying bashrc and profile to /etc/skell and /root"
 cp .bashrc .profile /etc/skel
-cp .profile "$HOME/.profile"
-sed 's/32m/31m/' .bashrc > "$HOME/.bashrc"
+cp .bashrc .profile "$HOME"
 
 echo "Copying svim to system executables directory"
 cp .bin/svim /usr/local/bin/svim

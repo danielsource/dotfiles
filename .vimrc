@@ -5,9 +5,9 @@ set tabstop=8 shiftwidth=8 noexpandtab
 set formatoptions+=lj cinoptions=c0,t0,:0,g0
 set number relativenumber
 set backspace=indent,eol,start
-set display=truncate
-set listchars=tab:\|\ ,lead:·,trail:·
 set splitright splitbelow
+set display=truncate
+set listchars=eol:$,tab:<->,space:.
 set showcmd ruler
 set laststatus=1
 set hlsearch incsearch
@@ -71,9 +71,11 @@ if !has('nvim')
 	nn <silent> <C-l> :nohlsearch<C-r>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-l>
 
 	syntax on
+	set bg=dark
 	augroup colors
 		au!
-		au ColorScheme habamax hi Normal ctermbg=NONE
+		au ColorScheme * hi Normal ctermbg=NONE
+		au ColorScheme * hi! link SpecialKey Comment
 	augroup END
 	colorscheme habamax
 endif
