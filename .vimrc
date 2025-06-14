@@ -9,7 +9,7 @@ set splitright splitbelow
 set scrolloff=0
 set display=truncate
 set listchars=eol:$,tab:<->,space:.
-set showcmd ruler
+set showcmd ruler rulerformat=%10(%v%=\ %P%)
 set laststatus=1
 set hlsearch incsearch
 set completeopt=menu,longest,preview
