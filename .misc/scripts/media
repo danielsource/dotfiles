@@ -27,7 +27,7 @@ playerctl_toggle_pause() {
 playerctl_stop() {
 	i=0
 	while [ $i -le 5 ]; do
-		playerctl -a stop || return
+		playerctl -a stop 2>/dev/null || return
 		i=$((i + 1))
 	done
 }
