@@ -19,7 +19,7 @@ if [ -n "$BASH_VERSION" ]; then
 	fi
 fi
 
-if [ "$(id -u)" -ne 0 ]; then
+if [ $(id -u) -ne 0 ]; then
 	if [ -d /var/lib/flatpak/exports/bin ]; then
 		PATH="$PATH:/var/lib/flatpak/exports/bin"
 	fi

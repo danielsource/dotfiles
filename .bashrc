@@ -9,39 +9,51 @@ shopt -s extglob
 shopt -s globskipdots
 stty -ixon
 
-if [ "$TERM" = linux ]; then
-	printf '\e]P0000000\e]P1cd3131\e]P20dbc79\e]P3e5e510\e]P42472c8\e]P5bc3fbc\e]P611a8cd\e]P8666666\e]P9f14c4c\e]PA23d18b\e]PBf5f543\e]PC3b8eea\e]PDd670d6\e]PE29b8db'
+if [ $(id -u) -eq 0 ]; then
+	is_root=1
 fi
 
-if [ "$(id -u)" -ne 0 ] && [[ ! "$TERM" =~ dumb|eterm* ]]; then
+if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
+	debian_chroot=$(cat /etc/debian_chroot)
+fi
+
+case "$TERM" in
+xterm-color|*-256color)
+	color_prompt=1 ;;
+linux)
+	printf '\e]P0000000\e]P1cd3131\e]P20dbc79\e]P3e5e510\e]P42472c8\e]P5bc3fbc\e]P611a8cd\e]P8666666\e]P9f14c4c\e]PA23d18b\e]PBf5f543\e]PC3b8eea\e]PDd670d6\e]PE29b8db'
+	color_prompt=1 ;;
+esac
+
+if [[ ! "$TERM" =~ dumb|eterm* ]]; then
 	if [ -f "${PREFIX:-/usr}"/share/bash-completion/bash_completion ]; then
 		. "${PREFIX:-/usr}"/share/bash-completion/bash_completion
 	elif [ -f /etc/bash_completion ]; then
 		. /etc/bash_completion
 	fi
-	if [ -f "${PREFIX:-/usr}"/share/doc/fzf/examples/key-bindings.bash ]; then
-		. "${PREFIX:-/usr}"/share/doc/fzf/examples/key-bindings.bash
-	fi
 
-	bind -x '"\eOP":tmuxhere' # F1
-	if command -v st >/dev/null; then
-		bind -x '"\eOQ":setsid st' # F2
+	if [ -z "$is_root" ]; then
+		if [ -f "${PREFIX:-/usr}"/share/doc/fzf/examples/key-bindings.bash ]; then
+			. "${PREFIX:-/usr}"/share/doc/fzf/examples/key-bindings.bash
+		fi
+		bind -x '"\eOP":tmuxhere' # F1
+		if command -v st >/dev/null; then
+			bind -x '"\eOQ":setsid st' # F2
+		fi
 	fi
+fi
 
-	if command -v __git_ps1 >/dev/null; then
-		GIT_PS1_SHOWDIRTYSTATE=1
-		GIT_PS1_SHOWSTASHSTATE=1
-		GIT_PS1_SHOWUNTRACKEDFILES=1
-		GIT_PS1_SHOWUPSTREAM=auto
-		GIT_PS1_HIDE_IF_PWD_IGNORED=1
-		PS1='\[\e]0;($?) In \W $(__git_ps1 "on %s")\a\]% '
+if [ -n "$color_prompt" ]; then
+	printf "\e]0;$(ps -o tty= -p $$)\a"
+	if [ -z "$is_root" ]; then
+		PS1='${debian_chroot:+($debian_chroot) }\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\W\[\033[00m\]\$ '
 	else
-		PS1='\[\e]0;($?) \W\a\]% '
+		PS1='${debian_chroot:+($debian_chroot) }\[\033[01;31m\]\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]# '
 	fi
 else
-	printf "\e]0;$0\a"
-	PS1='\$ '
+	PS1='${debian_chroot:+($debian_chroot) }\u@\h:\W\$ '
 fi
+unset is_root color_prompt
 
 asciigraph() {
 	cat <<'EOF'
@@ -96,97 +108,38 @@ lastmod() {
 	find "$@" -type f -exec stat -c '%Y :%y %n' {} + | sort -nr | cut -d: -f2-
 }
 
-lz() {
-	if [ $# -eq 0 ]; then
-		echo '?' >&2
-		return 2
-	fi
-
-	local out treedepth arch cache patt
-
-	case $1 in
-	-t[1-9]*) treedepth="${1#-t}" && shift ;;
-	-t) treedepth=0 && shift ;;
-	-t0) unset treedepth && shift ;;
-	esac
-
-	if [ $# -lt 1 ] || [ $# -gt 2 ]; then
-		echo '?' >&2
-		return 2
-	fi
-
-	arch=$1 && shift
-	cache=${XDG_CACHE_HOME:-$HOME/.cache}/lz-"$(basename "$arch")".txt
-	if [ "$cache" -nt "$arch" ]; then
-		out=$(cat "$cache")
-	else
-		case $arch in
-		*.zip) mkdir -p "$(dirname "$cache")" && out=$(zipinfo -1 "$arch" | tee "$cache") ;;
-		*.tar|*.tar.gz|*.tar.xz) mkdir -p "$(dirname "$cache")" && out=$(tar -tf "$arch" | tee "$cache") ;;
-		*) return 1;
-		esac
-	fi
-
-	patt=$1 && shift
-	if [ -z "$treedepth" ] || ! command -v tree >/dev/null; then
-		echo "$out" | grep -- "$patt"
-		return
-	fi
-	if [ "$treedepth" -eq 0 ]; then
-		echo "$out" | grep -- "$patt" | tree --fromfile .
-		return
-	fi
-	echo "$out" | grep -- "$patt" | tree --fromfile . -L "$treedepth"
-}
-
-iman() {
-	if [ -z "$1" ]; then
-		echo '?' >&2
-		return 1
-	fi
-	case $1 in
-	*.info.gz|*.info-*.gz)
-		gzip -d < "$1" | tr '\037' '#' | "${PAGER:-less}" -M ;;
-	*)
-		if [ -f /usr/share/info/"$1".info"$2".gz ]; then
-			gzip -d < /usr/share/info/"$1".info"$2".gz | tr '\037' '#' | "${PAGER:-less}" -M
-		else
-			man "$1"
-		fi
-	esac
-}
-
-sysc() {
-	man "${1:-2}" \
-		"$(echo '#include <sys/syscall.h>' |
-		cpp -dM |
-		awk '/#define __NR_/ {print $3 "\t" substr($2, 6)}' |
-		sort -n |
-		fzf |
-		cut -f2)"
-}
-
 tmuxhere() {
 	tmux new-session -As "$(printf '%.*s' 7 "$(basename "$PWD" | tr -cd '[:alnum:]')")"
 }
 
-wh() {
-	local delay=1 err
-	if [ $# -gt 2 ]; then
-		echo '?' >&2
-		return 1
-	elif [ $# -eq 2 ]; then
-		delay=$1
-		shift || return
+trysudo() {
+	if [ $(id -u) -eq 0 ] || ! command -v sudo >/dev/null; then
+		"$@"
+	else
+		sudo -- "$@"
 	fi
-	while :; do
-		watch -ten "$delay" -- "$@"
-		err=$?
-		if [ $err -ne 8 ]; then
-			return $err
-		fi
-		sleep 0.3
-	done
+}
+
+update() {
+	(set -e; . /etc/os-release; distro=${ID_LIKE:-$ID}
+	case $distro in
+	(*debian*)
+		trysudo apt update
+		trysudo apt -y upgrade
+		;;
+	(*)
+		echo "Not supported" >&2
+		exit 1
+		;;
+	esac) || return
+	if command -v flatpak >/dev/null; then
+		printf 'Try to update flatpaks? [Y/n] '
+		read opt
+		case $opt in
+			''|[Yy]*) flatpak update -y ;;
+			*) return ;;
+		esac
+	fi
 }
 
 alias ls='LC_COLLATE=C ls -h --color=auto --group-directories-first --time-style="+%y %b %d %H:%M:%S"'
