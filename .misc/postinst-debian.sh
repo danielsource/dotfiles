@@ -2,7 +2,7 @@
 
 set -e
 
-if [ "$(id -u)" -ne 0 ]; then
+if [ $(id -u) -ne 0 ]; then
 	echo "Must be root" >&2
 	exit 1
 fi
@@ -21,73 +21,78 @@ if [ -e "$motd_file" ]; then
 	echo
 fi
 
+motd_def_file=/etc/update-motd.d/10-uname
+if [ -e "$motd_def_file" ]; then
+	echo "Moving $motd_def_file to $motd_def_file.dpkg-old"
+	mv "$motd_def_file" "$motd_def_file.dpkg-old"
+	echo
+fi
+
 ### Debian only ###
 if . /etc/os-release && [ "$ID" = debian ] && [ -n "$VERSION_ID" ]
 then
+	echo "You are in $NAME $VERSION_ID"
+	echo
 
-echo "You are in $NAME $VERSION_ID"
-echo
+	echo "Install software-properties-common to configure contrib and non-free exceptions"
+	apt -y install --no-install-recommends --no-install-suggests software-properties-common
+	echo "[END] Install software-properties-common"
+	echo
 
-echo "Install software-properties-common to configure contrib and non-free exceptions"
-apt -y install software-properties-common
-echo "[END] Install software-properties-common"
-echo
+	echo "Creating files at /etc/apt/preferences.d/ ..."
 
-echo "Creating files at /etc/apt/preferences.d/ ..."
+	cat <<-'EOF' > /etc/apt/preferences.d/block_contrib
+	Package: *
+	Pin: release o=Debian,a=stable,l=Debian,c=contrib
+	Pin-Priority: -1
+	EOF
 
-cat <<'EOF' > /etc/apt/preferences.d/block_contrib
-Package: *
-Pin: release o=Debian,a=stable,l=Debian,c=contrib
-Pin-Priority: -1
-EOF
+	cat <<-'EOF' > /etc/apt/preferences.d/block_non-free
+	Package: *
+	Pin: release o=Debian,a=stable,l=Debian,c=non-free
+	Pin-Priority: -1
+	EOF
 
-cat <<'EOF' > /etc/apt/preferences.d/block_non-free
-Package: *
-Pin: release o=Debian,a=stable,l=Debian,c=non-free
-Pin-Priority: -1
-EOF
+	cat <<-'EOF' > /etc/apt/preferences.d/allow_docs
+	Package: manpages-posix
+	Pin: release o=Debian,a=stable,l=Debian,c=non-free
+	Pin-Priority: 600
 
-cat <<'EOF' > /etc/apt/preferences.d/allow_docs
-Package: manpages-posix
-Pin: release o=Debian,a=stable,l=Debian,c=non-free
-Pin-Priority: 600
+	Package: manpages-posix-dev
+	Pin: release o=Debian,a=stable,l=Debian,c=non-free
+	Pin-Priority: 600
 
-Package: manpages-posix-dev
-Pin: release o=Debian,a=stable,l=Debian,c=non-free
-Pin-Priority: 600
+	Package: gcc-doc
+	Pin: release o=Debian,a=stable,l=Debian,c=contrib
+	Pin-Priority: 600
 
-Package: gcc-doc
-Pin: release o=Debian,a=stable,l=Debian,c=contrib
-Pin-Priority: 600
+	Package: gcc-doc-base
+	Pin: release o=Debian,a=stable,l=Debian,c=contrib
+	Pin-Priority: 600
 
-Package: gcc-doc-base
-Pin: release o=Debian,a=stable,l=Debian,c=contrib
-Pin-Priority: 600
+	Package: gcc-12-doc
+	Pin: release o=Debian,a=stable,l=Debian,c=non-free
+	Pin-Priority: 600
 
-Package: gcc-12-doc
-Pin: release o=Debian,a=stable,l=Debian,c=non-free
-Pin-Priority: 600
+	Package: cpp-doc
+	Pin: release o=Debian,a=stable,l=Debian,c=contrib
+	Pin-Priority: 600
 
-Package: cpp-doc
-Pin: release o=Debian,a=stable,l=Debian,c=contrib
-Pin-Priority: 600
+	Package: cpp-12-doc
+	Pin: release o=Debian,a=stable,l=Debian,c=non-free
+	Pin-Priority: 600
 
-Package: cpp-12-doc
-Pin: release o=Debian,a=stable,l=Debian,c=non-free
-Pin-Priority: 600
+	Package: gdb-doc
+	Pin: release o=Debian,a=stable,l=Debian,c=non-free
+	Pin-Priority: 600
+	EOF
 
-Package: gdb-doc
-Pin: release o=Debian,a=stable,l=Debian,c=non-free
-Pin-Priority: 600
-EOF
+	echo
 
-echo
-
-echo "Add contrib and non-free"
-apt-add-repository -y contrib non-free
-echo "[END] Add contrib and non-free"
-echo
-
+	echo "Add contrib and non-free"
+	apt-add-repository -y contrib non-free
+	echo "[END] Add contrib and non-free"
+	echo
 fi
 ### END Debian only ###
 
@@ -97,11 +102,12 @@ echo "[END] apt update && apt upgrade"
 echo
 
 echo "Install my tools and goodies"
-apt -y install \
+apt -y install --no-install-recommends --no-install-suggests \
 	apt-file \
 	arch-install-scripts \
 	ascii \
 	bash-completion \
+	bc \
 	bmake \
 	build-essential \
 	cpp-doc \
@@ -117,20 +123,23 @@ apt -y install \
 	gdb-doc \
 	gimp \
 	git \
+	gnupg \
 	gparted \
-	gpg \
 	gpick \
+	groff \
 	imagemagick \
 	kruler \
 	libimage-exiftool-perl \
 	libnotify-bin \
 	libsdl2-dev \
 	libx11-doc \
+	links \
+	lsof \
 	ltrace \
 	lxappearance \
-	lynx \
 	man-db \
 	manpages \
+	manpages-dev \
 	manpages-posix \
 	manpages-posix-dev \
 	mat2 \
@@ -146,6 +155,7 @@ apt -y install \
 	python3-pygame \
 	qalc \
 	rename \
+	rsync \
 	scrot \
 	shellcheck \
 	strace \
@@ -173,7 +183,7 @@ echo
 
 case $(uname -n) in vm-*)
 	echo "Install VM guest tools"
-	apt -y install spice-webdavd spice-vdagent davfs2
+	apt -y install --no-install-recommends --no-install-suggests spice-webdavd spice-vdagent davfs2
 	echo "[END] Install VM guest tools"
 	echo
 	;;
