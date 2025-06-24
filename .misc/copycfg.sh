@@ -2,18 +2,31 @@
 
 set -e
 
+trycopy() {
+	dst="$1"
+	basen="$(basename "$1")"
+	src="${basen#.}"
+	if [ ! -e "$dst" ]; then
+		echo "creating: $dst from $src"
+		mkdir -p "$(dirname "$dst")"
+		sed \
+			-e "s|%DOWNLOAD%|$(xdg-user-dir DOWNLOAD)|" \
+			-e "s|%DOCUMENTS%|$(xdg-user-dir DOCUMENTS)|" \
+			"$src" > "$dst"
+	else
+		diff -U 0 --color "$src" "$dst" && echo "exists: $dst"
+	fi
+	return 0
+}
+
 cd "$(dirname "$0")"
 
-cp xinitrc ~/.xinitrc
+trycopy ~/.xinitrc
 
-mkdir -p "${XDG_CONFIG_HOME:-$HOME/.config}"
-cp user-dirs.dirs "${XDG_CONFIG_HOME:-$HOME/.config}"
+trycopy "${XDG_CONFIG_HOME:-$HOME/.config}"/user-dirs.dirs
 
-mkdir -p "${XDG_CONFIG_HOME:-$HOME/.config}"/fontconfig
-sed "s|%DOWNLOAD%|$(xdg-user-dir DOWNLOAD)|" fonts.conf > "${XDG_CONFIG_HOME:-$HOME/.config}"/fontconfig/fonts.conf
+trycopy "${XDG_CONFIG_HOME:-$HOME/.config}"/fontconfig/fonts.conf
 
-mkdir -p "${XDG_CONFIG_HOME:-$HOME/.config}"/zathura
-cp zathurarc "${XDG_CONFIG_HOME:-$HOME/.config}"/zathura
+trycopy "${XDG_CONFIG_HOME:-$HOME/.config}"/zathura/zathurarc
 
-mkdir -p "${XDG_DATA_HOME:-$HOME/.local/share}"/xfce4/terminal/colorschemes
-cp xfce4-terminal.theme "${XDG_DATA_HOME:-$HOME/.local/share}"/xfce4/terminal/colorschemes
+trycopy "${XDG_DATA_HOME:-$HOME/.local/share}"/xfce4/terminal/colorschemes/xfce4-terminal.theme
