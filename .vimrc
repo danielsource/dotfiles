@@ -7,7 +7,7 @@ set number relativenumber
 set backspace=indent,eol,start
 set splitright splitbelow
 set scrolloff=0
-set display=truncate
+set display=uhex,truncate isprint=
 set listchars=eol:$,tab:<->,space:.
 set showcmd ruler rulerformat=%10(%v%=\ %P%)
 set laststatus=1
