@@ -1,0 +1,12 @@
+#!/bin/sh
+
+set -e
+
+for file; do
+	name=$(basename "$file")
+	newname=$(echo "$name" | iconv -f UTF-8 -t ASCII//TRANSLIT)
+	newname=$(echo "$newname" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9._-]\+/-/g')
+	if [ "$name" != "$newname" ]; then
+		echo mv -n -- \'"$(echo "$file" | sed "s/'/'\"'\"'/g")"\' \'"$(dirname "$file")/$newname"\'
+	fi
+done

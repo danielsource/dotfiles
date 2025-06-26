@@ -44,11 +44,10 @@ if [[ ! "$TERM" =~ dumb|eterm* ]]; then
 fi
 
 if [ -n "$color_prompt" ]; then
-	printf "\e]0;$(ps -o tty= -p $$)\a"
 	if [ -z "$is_root" ]; then
-		PS1='${debian_chroot:+($debian_chroot) }\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\W\[\033[00m\]\$ '
+		PS1='\[\e]0;'"$0"' ($?)\a\]${debian_chroot:+($debian_chroot) }\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\W\[\033[00m\]\$ '
 	else
-		PS1='${debian_chroot:+($debian_chroot) }\[\033[01;31m\]\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]# '
+		PS1='\[\e]0;'"$0"' ($?)\a\]${debian_chroot:+($debian_chroot) }\[\033[01;31m\]\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]# '
 	fi
 else
 	PS1='${debian_chroot:+($debian_chroot) }\u@\h:\W\$ '
@@ -109,7 +108,7 @@ lastmod() {
 }
 
 tmuxhere() {
-	tmux new-session -As "$(printf '%.*s' 7 "$(basename "$PWD" | tr -cd '[:alnum:]')")"
+	exec tmux new-session -As "$(printf '%.*s' 7 "$(basename "$PWD" | tr -cd '[:alnum:]')")"
 }
 
 trysudo() {
