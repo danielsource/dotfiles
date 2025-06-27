@@ -23,6 +23,8 @@ cd "$(dirname "$0")"
 
 trycopy ~/.xinitrc
 
+trycopy ~/.emacs
+
 trycopy "${XDG_CONFIG_HOME:-$HOME/.config}"/user-dirs.dirs
 
 trycopy "${XDG_CONFIG_HOME:-$HOME/.config}"/fontconfig/fonts.conf

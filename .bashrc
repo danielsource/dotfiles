@@ -108,7 +108,26 @@ lastmod() {
 }
 
 tmuxhere() {
-	exec tmux new-session -As "$(printf '%.*s' 7 "$(basename "$PWD" | tr -cd '[:alnum:]')")"
+	local name
+	name=$(printf '%.*s' 7 "$(basename "$PWD" | tr -cd '[:alnum:]')")
+	exec tmux new-session -As "${name:-root}" "$@"
+}
+
+code() {
+	if [ -d "$1" ]; then
+		cd "$1"
+		shift
+	elif [ -n "$1" ]; then
+		local f=$1
+		shift
+		set -- "$(basename "$f")" "$@"
+		cd "$(dirname "$f")"
+	fi
+	if [ $COLUMNS -lt 144 ]; then
+		tmuxhere "tmux split-window -d -l 30%; ${EDITOR:-vim} $*"
+	else
+		tmuxhere "tmux split-window -dh -l 40%; ${EDITOR:-vim} $*"
+	fi
 }
 
 trysudo() {
@@ -120,7 +139,7 @@ trysudo() {
 }
 
 update() {
-	(set -e; . /etc/os-release; distro=${ID_LIKE:-$ID}
+	(. /etc/os-release; distro=${ID_LIKE:-$ID}
 	case $distro in
 	(*debian*)
 		trysudo apt update
