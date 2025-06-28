@@ -37,6 +37,7 @@ if [[ ! "$TERM" =~ dumb|eterm* ]]; then
 			. "${PREFIX:-/usr}"/share/doc/fzf/examples/key-bindings.bash
 		fi
 		bind -x '"\eOP":tmuxhere' # F1
+		bind -x '"\e[1;2P":tmux has >/dev/null && [ -z "$TMUX" ] && exec tmux attach' # Shift-F1
 		if command -v st >/dev/null; then
 			bind -x '"\eOQ":setsid st' # F2
 		fi
@@ -108,20 +109,39 @@ lastmod() {
 }
 
 tmuxhere() {
+	if [ -n "$TMUX" ]; then
+		return 1
+	fi
 	local name
 	name=$(printf '%.*s' 7 "$(basename "$PWD" | tr -cd '[:alnum:]')")
 	exec tmux new-session -As "${name:-root}" "$@"
 }
 
 code() {
+	local f par
 	if [ -d "$1" ]; then
-		cd "$1"
-		shift
-	elif [ -n "$1" ]; then
-		local f=$1
-		shift
-		set -- "$(basename "$f")" "$@"
-		cd "$(dirname "$f")"
+		par=$1 && shift
+	elif [ -e "$1" ]; then
+		f=$1 && shift
+		par=$(dirname "$f")
+	fi
+	if [ -n "$par" ]; then
+		for arg; do
+			if [ -e "$arg" ]; then
+				set -- "$@" "$(realpath -s --relative-to="$par" "$arg")"
+				echo "$@"
+			else
+				set -- "$@" "$arg"
+			fi
+			shift
+		done
+		if [ -n "$f" ]; then
+			set -- "$(basename "$f")" "$@"
+		fi
+		cd "$par" || return
+	fi
+	if [ -n "$TMUX" ]; then
+		exec "${EDITOR:-vim}" "$@"
 	fi
 	if [ $COLUMNS -lt 144 ]; then
 		tmuxhere "tmux split-window -d -l 30%; ${EDITOR:-vim} $*"
